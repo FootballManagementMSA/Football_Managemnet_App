@@ -7,4 +7,5 @@ import com.example.core.model.MakeClubModel
 interface ClubDataSource {
     suspend fun sendClubInfo(makeClubModel: MakeClubModel): MakeClubResult
     suspend fun searchClub(code: String): List<ClubInfo>
+    suspend fun getJoinedClub(): List<ClubInfo>
 }

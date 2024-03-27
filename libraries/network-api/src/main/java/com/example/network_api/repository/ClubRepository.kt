@@ -9,4 +9,5 @@ import okhttp3.RequestBody
 interface ClubRepository {
     suspend fun sendClubInfo(name: RequestBody, emblem: MultipartBody.Part): RespResult<MakeClubResponse>
     suspend fun searchClub(code: String): RespResult<SearchClubResponse>
+    suspend fun getJoinedClub(): RespResult<SearchClubResponse>
 }
