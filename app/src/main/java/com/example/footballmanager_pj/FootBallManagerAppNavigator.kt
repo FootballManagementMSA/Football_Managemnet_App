@@ -48,6 +48,7 @@ fun FootBallManagerAppNavigator(
     val clubSearchViewModel: ClubSearchViewModel = hiltViewModel()
     val makeClubViewModel: MakeClubViewModel = hiltViewModel()
     val scheduleViewModel: ScheduleViewModel = hiltViewModel()
+    val joinViewModel:JoinViewModel= hiltViewModel()
 
     NavHost(
         modifier = Modifier.padding(vertical = if (showBarList.contains(uiRoute.value)) 60.dp else 0.dp),

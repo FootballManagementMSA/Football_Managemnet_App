@@ -134,9 +134,8 @@ fun ClubItemPreview() {
         remember { mutableStateOf(1) } // Remember to initialize selectedIndex using remember
 
     ClubItem(selectedIndex = selectedIndex, index = 1, {}) {
-        ClubContent(club = ClubInfo(3, "teamname", 20, "unique", ""))
-    ClubItem(selectedIndex = mutableStateOf(1), index = 1) {
-        ClubContent(club = ClubInfo(3, "teamname", 20,"세부적인 내용을 적어주세요", "unique", ""))
+        ClubContent(club = ClubInfo(3, "teamname", 20, "unique", "", ""))
     }
+    
 
 }

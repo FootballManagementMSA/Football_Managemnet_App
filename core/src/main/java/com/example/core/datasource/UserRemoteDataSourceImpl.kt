@@ -1,7 +1,6 @@
 package com.example.core.datasource
 
 import android.util.Log
-import com.example.core.JoinResult
 import com.example.core.ResultState.BaseResult
 import com.example.core.ResultState.ClubJoinRequestResult
 import com.example.core.ResultState.LoginResult
