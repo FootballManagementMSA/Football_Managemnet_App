@@ -15,14 +15,14 @@ class ScheduleViewModel @Inject constructor(
     private val makeScheduleUseCase: MakeScheduleUseCase
 ) : ViewModel() {
     fun makeClub(teamId: Long, clubSchedule: ClubSchedule) = viewModelScope.launch {
-        val a = makeScheduleUseCase(teamId, clubSchedule)
-        when(a) {
+        val result = makeScheduleUseCase(teamId, clubSchedule)
+        when(result) {
             is MakeClubScheduleResult.Success -> {
-                Log.e("123", "${a.uniqueNumber}")
+                Log.e("makeClub", "${result.code}")
             }
 
             is MakeClubScheduleResult.Error -> {
-                Log.e("123", "${a.errorMessage}")
+                Log.e("makeClub", result.errorMessage)
             }
         }
     }

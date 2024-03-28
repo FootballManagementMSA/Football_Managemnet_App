@@ -8,6 +8,6 @@ sealed class MakeClubResult {
 }
 
 sealed class MakeClubScheduleResult {
-    data class Success(val uniqueNumber: Int) : MakeClubScheduleResult()
+    data class Success(val code: Int) : MakeClubScheduleResult()
     data class Error(val errorMessage: String) : MakeClubScheduleResult()
 }
