@@ -12,6 +12,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,7 +32,8 @@ import com.example.ui_component.values.mainTheme
 fun JoinClubScreen(
     onSearchIconClick: (String) -> Unit,
     onNavigateToMakeClub: () -> Unit,
-    onNavigateToClubSearch: () -> Unit
+    onNavigateToClubSearch: () -> Unit,
+    getJoinedClub: () -> Unit
 ) {
     val showSheet = remember {
         mutableStateOf(true)
@@ -40,6 +42,9 @@ fun JoinClubScreen(
         mutableStateOf(
             dummyClub()
         )
+    }
+    LaunchedEffect(Unit) {
+        getJoinedClub()
     }
     if (showSheet.value) {
         DefaultBottomSheet(onDismiss = { showSheet.value = false }) {
@@ -95,7 +100,7 @@ fun JoinClubScreen(
 @Composable
 @Preview
 fun JoinClubScreenPreview() {
-    JoinClubScreen(onSearchIconClick = {}, onNavigateToMakeClub = {}) {}
+    JoinClubScreen(onSearchIconClick = {}, onNavigateToMakeClub = {}, onNavigateToClubSearch = {}) {}
 }
 
 fun dummyClub() = Club(

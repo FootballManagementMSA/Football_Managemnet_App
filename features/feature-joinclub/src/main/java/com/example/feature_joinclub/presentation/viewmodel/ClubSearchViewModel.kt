@@ -3,6 +3,7 @@ package com.example.feature_joinclub.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.model.ClubInfo
+import com.example.core.model.UserTeamInfoModel
 import com.example.coroutine.IoDispatcher
 import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
 import com.example.feature_joinclub.domain.usecase.SearchClubUseCase
@@ -25,8 +26,12 @@ class ClubSearchViewModel @Inject constructor(
     private val _searchedClub = MutableStateFlow<List<ClubInfo>>(listOf())
     val searchedClub: StateFlow<List<ClubInfo>> = _searchedClub
 
-    private val _joinedClub = MutableStateFlow<List<ClubInfo>>(listOf())
-    val joinedClub : StateFlow<List<ClubInfo>> = _joinedClub
+    private val _joinedClub = MutableStateFlow<List<UserTeamInfoModel>>(listOf())
+    val joinedClub : StateFlow<List<UserTeamInfoModel>> = _joinedClub
+
+    init {
+        getJoinedClubList()
+    }
 
     fun searchClub(clubName: String) {
         _searchValue.value = clubName

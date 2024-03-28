@@ -1,5 +1,6 @@
 package com.example.network_api.api
 
+import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
 import com.example.network_api.response.SearchClubResponse
 import okhttp3.MultipartBody
@@ -9,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ClubApi {
@@ -23,4 +25,9 @@ interface ClubApi {
     suspend fun searchClub(
         @Query("search") code: String
     ): Response<SearchClubResponse>
+
+    @GET("/users/{userId}/teams")
+    suspend fun getJoinedClub(
+        @Path("userId") userId: Long
+    ): Response<JoinedClubResponse>
 }

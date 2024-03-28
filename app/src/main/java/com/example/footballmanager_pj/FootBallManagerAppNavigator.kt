@@ -142,6 +142,9 @@ fun FootBallManagerAppNavigator(
                 },
                 onNavigateToClubSearch = {
                     navHostController.navigate("CLUB_SEARCH")
+                },
+                getJoinedClub = {
+                    clubSearchViewModel.getJoinedClubList()
                 }
             )
         }
