@@ -20,6 +20,7 @@ import com.example.feature_join.presentation.screen.ProfileSettingScreen
 import com.example.feature_join.presentation.viewmodel.JoinViewModel
 import com.example.feature_joinclub.presentation.screen.ClubSearchScreen
 import com.example.feature_clubpage.presentation.screen.ClubPageScreen
+import com.example.feature_join.presentation.screen.StudentVerificationScreen
 import com.example.feature_joinclub.presentation.screen.JoinClubScreen
 import com.example.feature_joinclub.presentation.viewmodel.ClubSearchViewModel
 import com.example.feature_login.presentation.screen.LoginScreen
@@ -48,7 +49,7 @@ fun FootBallManagerAppNavigator(
     val clubSearchViewModel: ClubSearchViewModel = hiltViewModel()
     val makeClubViewModel: MakeClubViewModel = hiltViewModel()
     val scheduleViewModel: ScheduleViewModel = hiltViewModel()
-    val joinViewModel:JoinViewModel= hiltViewModel()
+    val joinViewModel: JoinViewModel = hiltViewModel()
 
     NavHost(
         modifier = Modifier.padding(vertical = if (showBarList.contains(uiRoute.value)) 60.dp else 0.dp),
@@ -61,7 +62,17 @@ fun FootBallManagerAppNavigator(
         }
         composable(Route.LOGIN) {
             onNavigate(Route.LOGIN)
-            LoginScreen(navHostController)
+            LoginScreen(
+                navHostController,
+                onNavigateToStudentVertificationScreen = {
+                    navHostController.navigate("STUDENT_VERIFICATION") })
+        }
+        composable(Route.STUDENT_VERIFICATION) {
+            onNavigate(Route.STUDENT_VERIFICATION)
+            StudentVerificationScreen(navHostController,
+                onNavigateToJoinScreen = { navHostController.navigate("JOIN") })
+
+
         }
         composable(Route.JOIN) {
             JoinScreen(
@@ -73,7 +84,7 @@ fun FootBallManagerAppNavigator(
         }
         composable("make_schedule") {
             MakeScheduleScreen { id, schedule ->
-                Log.e("123","$id $schedule")
+                Log.e("123", "$id $schedule")
                 scheduleViewModel.makeClub(id, schedule)
             }
         }
