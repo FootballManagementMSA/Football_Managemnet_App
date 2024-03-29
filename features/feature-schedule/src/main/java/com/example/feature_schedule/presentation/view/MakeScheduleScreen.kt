@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.auto_complete.AutoCompleteSearchBox
 import com.example.calendar.Calendar
 import com.example.core.model.ClubSchedule
 import com.example.ui_component.R
@@ -53,16 +54,19 @@ fun MakeScheduleScreen(
     onMake: (Long, ClubSchedule) -> Unit
 ) {
     val myUri = remember { mutableStateOf<Uri?>(null) }
-    val otherUserUri = remember { mutableStateOf<Uri?>(null) }
     val title = remember { mutableStateOf("") }
     val memo = remember { mutableStateOf("") }
     val startDate = remember { mutableStateOf("") }
     val endDate = remember { mutableStateOf("") }
     val location = remember { mutableStateOf("") }
     val showCalendar = remember { mutableStateOf(false) }
+    val showAutoComplete = remember { mutableStateOf(false) }
     val setStart = remember { mutableStateOf(false) }
     if (showCalendar.value) {
         CalendarSheet(showCalendar, setStart, startDate, endDate)
+    }
+    if (showAutoComplete.value) {
+        AutoCompleteSheet(showAutoComplete = showAutoComplete)
     }
     Column(
         Modifier
@@ -80,7 +84,7 @@ fun MakeScheduleScreen(
         ScheduleLocationView(location)
         Spacer(modifier = Modifier.weight(0.4f))
         Text("상대팀 설정", color = Color.Gray)
-        SetTeamView(myUri, otherUserUri)
+        SetTeamView(myUri, showAutoComplete)
         Spacer(modifier = Modifier.weight(1f))
         CustomGradientButton(
             gradientColors = gradientColorsList,
@@ -107,7 +111,7 @@ fun MakeScheduleScreen(
 }
 
 @Composable
-private fun SetTeamView(myUri: MutableState<Uri?>, otherUserUri: MutableState<Uri?>) {
+private fun SetTeamView(myUri: MutableState<Uri?>, showAutoComplete: MutableState<Boolean>) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         DefaultEmblemSelectIconView(
             modifier = Modifier
@@ -126,17 +130,16 @@ private fun SetTeamView(myUri: MutableState<Uri?>, otherUserUri: MutableState<Ur
             color = Color.Gray,
             fontSize = middleFont
         )
-        DefaultEmblemSelectIconView(
+        Box(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(emblem)
                 .size(40.dp)
-                .padding(top = 5.dp),
-            state = otherUserUri,
-            defaultIcon = R.drawable.league_icon
-        ) {
-
-        }
+                .padding(top = 5.dp)
+                .clickable {
+                    showAutoComplete.value = true
+                },
+        )
     }
 }
 
@@ -273,6 +276,22 @@ private fun CalendarSheet(
     }
 }
 
+@Composable
+private fun AutoCompleteSheet(
+    showAutoComplete: MutableState<Boolean>
+) {
+    DefaultBottomSheet(onDismiss = { showAutoComplete.value = false }) {
+        AutoCompleteSearchBox(
+            placeholder = "상대 구단을 검색해주세요.",
+            items = listOf<Int>(),
+            itemFilter = { it.toString() }) {
+
+        }
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun MakeScheduleScreenPreview() {
