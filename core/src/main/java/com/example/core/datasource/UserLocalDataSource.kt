@@ -11,4 +11,5 @@ interface UserLocalDataSource {
     suspend fun join()
     suspend fun getAccessToken(): String
     suspend fun clearDataStore()
+    suspend fun getUserId(): Long
 }

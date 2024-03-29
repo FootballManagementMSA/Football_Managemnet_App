@@ -63,4 +63,8 @@ internal class UserLocalDataSourceImpl @Inject constructor(
             it.clear()
         }
     }
+
+    override suspend fun getUserId(): Long {
+        return dataStore.data.first()[PreferenceKeys.USER_ID] ?: 0
+    }
 }

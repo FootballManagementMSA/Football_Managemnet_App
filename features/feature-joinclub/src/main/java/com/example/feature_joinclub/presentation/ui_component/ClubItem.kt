@@ -1,6 +1,5 @@
 package com.example.feature_joinclub.presentation.ui_component
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,9 +30,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.core.model.ClubInfo
+import com.example.core.model.UserTeamInfoModel
 import com.example.ui_component.HorizontalSpacer
 import com.example.ui_component.R
 import com.example.ui_component.VerticalSpacer
@@ -108,6 +108,50 @@ fun ClubContent(club: ClubInfo) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
                 model = club.emblem,
+                contentDescription = "profile image",
+                error = painterResource(id = R.drawable.default_profile_image),
+                placeholder = painterResource(
+                    id = R.drawable.default_profile_image
+                ),
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+            Icon(
+                modifier = Modifier,
+                imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                contentDescription = "Icon"
+            )
+        }
+    }
+}
+
+@Composable
+fun JoinedClubContent(club: UserTeamInfoModel) {
+    Row(
+        Modifier
+            .padding(20.dp)
+            .fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(Modifier) {
+            Text(text = club.teamName ?: "", fontWeight = FontWeight.Bold, fontSize = veryBigFont)
+            VerticalSpacer(value = 10)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Default.Person, contentDescription = "")
+                HorizontalSpacer(value = 5)
+                Text(text = "${club.sizeOfUsers} 명", fontSize = tinyFont)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Default.Star, contentDescription = "")
+                HorizontalSpacer(value = 5)
+                Text(text = club.introduce ?: "", fontSize = tinyFont)
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(
+                model = club.teamEmblem,
                 contentDescription = "profile image",
                 error = painterResource(id = R.drawable.default_profile_image),
                 placeholder = painterResource(

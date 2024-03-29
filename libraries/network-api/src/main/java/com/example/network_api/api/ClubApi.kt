@@ -1,10 +1,9 @@
 package com.example.network_api.api
 
 import com.example.network_api.entity.ClubJoin
-import com.example.network_api.entity.Join
-import com.example.network_api.response.ClubJoinResponse
-import com.example.network_api.response.JoinResponse
 import com.example.network_api.entity.ClubSchedule
+import com.example.network_api.response.ClubJoinResponse
+import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
 import com.example.network_api.response.MakeClubScheduleResponse
 import com.example.network_api.response.SearchClubResponse
@@ -46,14 +45,14 @@ interface ClubApi {
     ):Response<ClubJoinResponse>
     */
 
-
-
-
-
-
     @POST("/api/team-service/{teamId}/schedules")
     suspend fun makeClubSchedule(
         @Path("teamId") teamId: Long,
         @Body clubSchedule: ClubSchedule
     ): Response<MakeClubScheduleResponse>
+
+    @GET("/api/team-service/users/{userId}/teams")
+    suspend fun getJoinedClub(
+        @Path("userId") userId: Long
+    ): Response<JoinedClubResponse>
 }

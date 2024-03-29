@@ -4,10 +4,11 @@ import com.example.core.ResultState.MakeClubResult
 import com.example.core.ResultState.MakeClubScheduleResult
 import com.example.core.mapper.UiModelMapper.mapToUiModel
 import com.example.core.model.ClubInfo
-import com.example.core.model.MakeClubModel
-import com.example.core.util.FormDataUtil
 import com.example.core.model.ClubSchedule
 import com.example.core.model.ClubSchedule.Companion.mapToEntity
+import com.example.core.model.MakeClubModel
+import com.example.core.model.UserTeamInfoModel
+import com.example.core.util.FormDataUtil
 import com.example.network_api.repository.ClubRepository
 import com.example.network_api.response.RespResult
 import javax.inject.Inject
@@ -54,5 +55,10 @@ class ClubDataSourceImpl @Inject constructor(
                 MakeClubScheduleResult.Error(result.error.errorMessage)
             }
         }
+    }
+
+    override suspend fun getJoinedClub(): List<UserTeamInfoModel> {
+        val userId = userLocalDataSource.getUserId()
+        return clubRepository.getJoinedClub(userId).mapToUiModel().data
     }
 }

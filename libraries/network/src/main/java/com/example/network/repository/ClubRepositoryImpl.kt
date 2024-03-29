@@ -5,6 +5,7 @@ import com.example.network_api.RespMapper
 import com.example.network_api.api.ClubApi
 import com.example.network_api.entity.ClubSchedule
 import com.example.network_api.repository.ClubRepository
+import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
 import com.example.network_api.response.MakeClubScheduleResponse
 import com.example.network_api.response.RespResult
@@ -47,6 +48,17 @@ internal class ClubRepositoryImpl @Inject constructor(
         clubSchedule: ClubSchedule
     ): RespResult<MakeClubScheduleResponse> {
         val response = clubApi.makeClubSchedule(teamId, clubSchedule)
+        return if (response.isSuccessful) {
+            RespResult.Success(response.body()!!)
+        } else {
+            val errorBodyJson = response.errorBody()?.string() ?: ""
+            val errorBody = RespMapper.errorMapper(errorBodyJson)
+            RespResult.Error(ErrorType(errorBody.message!!, errorBody.code))
+        }
+    }
+
+    override suspend fun getJoinedClub(userId: Long): RespResult<JoinedClubResponse> {
+        val response = clubApi.getJoinedClub(userId)
         return if (response.isSuccessful) {
             RespResult.Success(response.body()!!)
         } else {

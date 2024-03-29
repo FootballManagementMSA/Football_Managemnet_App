@@ -12,37 +12,39 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.model.Club
-import com.example.core.model.ClubInfo
-import com.example.feature_joinclub.presentation.ui_component.ClubContent
+import com.example.core.model.UserTeamInfoModel
 import com.example.feature_joinclub.presentation.ui_component.ClubItem
 import com.example.feature_joinclub.presentation.ui_component.ClubSearchView
+import com.example.feature_joinclub.presentation.ui_component.JoinedClubContent
 import com.example.ui_component.template.DefaultBottomSheet
 import com.example.ui_component.template.DefaultListView
+import com.example.ui_component.values.bottomSheetColor
 import com.example.ui_component.values.mainTheme
 
 @Composable
 fun JoinClubScreen(
     onSearchIconClick: (String) -> Unit,
     onNavigateToMakeClub: () -> Unit,
-    onNavigateToClubSearch: () -> Unit
+    onNavigateToClubSearch: () -> Unit,
+    getJoinedClub: () -> Unit,
+    joinedTeamList: State<List<UserTeamInfoModel>>,
 ) {
     val showSheet = remember {
         mutableStateOf(true)
     }
-    val teamList = remember {
-        mutableStateOf(
-            dummyClub()
-        )
+    LaunchedEffect(Unit) {
+        getJoinedClub()
     }
     if (showSheet.value) {
-        DefaultBottomSheet(onDismiss = { showSheet.value = false }) {
+        DefaultBottomSheet(onDismiss = { showSheet.value = false }, containerColor = bottomSheetColor) {
             val selectedIndex = remember {
                 mutableStateOf(-1)
             }
@@ -58,9 +60,9 @@ fun JoinClubScreen(
                 onClick = { },
                 listContent = {
                     itemsIndexed(
-                        teamList.value.data,
-                        key = { _, item -> item.uniqueNum }) { index, club ->
-                        ClubItem(selectedIndex, index,{}) { ClubContent(club = club) }
+                        joinedTeamList.value,
+                        key = { _, item -> item.unique_num }) { index, club ->
+                        ClubItem(selectedIndex, index, {}) { JoinedClubContent(club = club) }
                     }
                 }
             )
@@ -91,21 +93,25 @@ fun JoinClubScreen(
     }
 }
 
-
 @Composable
 @Preview
 fun JoinClubScreenPreview() {
-    JoinClubScreen(onSearchIconClick = {}, onNavigateToMakeClub = {}) {}
-}
-
-fun dummyClub() = Club(
-    status = 1,
-    message = "message",
-    data = listOf(
-        ClubInfo(teamId = 3, teamName = "구단명", totalMemberCnt = 20, details = "", uniqueNum = "3da", emblem = "emblem_uri"),
-        ClubInfo(teamId = 3, teamName = "구단명2", totalMemberCnt = 20, details = "", uniqueNum = "3db", emblem = "emblem_uri"),
-        ClubInfo(teamId = 3, teamName = "구단명3", totalMemberCnt = 20, details = "", uniqueNum = "3dc", emblem = "emblem_uri"),
-        ClubInfo(teamId = 3, teamName = "구단명4", totalMemberCnt = 20, details = "", uniqueNum = "3de", emblem = "emblem_uri"),
+    val dummyData = listOf(
+        UserTeamInfoModel(
+            role = "Member",
+            introduce = "preview",
+            teamName = "preview",
+            unique_num = "CW123",
+            teamEmblem = "",
+            createdAt = "",
+            sizeOfUsers = 15
+        ),
     )
-)
-
+    JoinClubScreen(
+        onSearchIconClick = {},
+        onNavigateToMakeClub = {},
+        onNavigateToClubSearch = {},
+        getJoinedClub = {},
+        joinedTeamList = remember { mutableStateOf(dummyData) }
+    )
+}

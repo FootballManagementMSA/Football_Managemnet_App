@@ -1,7 +1,9 @@
 package com.example.core.mapper
 
+import android.util.Log
 import com.example.core.model.Club
 import com.example.core.model.ClubInfo
+import com.example.core.model.JoinedClub
 import com.example.core.model.JoinedClubData
 import com.example.core.model.JoinedClubInfo
 import com.example.core.model.LocalScreen
@@ -14,10 +16,12 @@ import com.example.core.model.Position
 import com.example.core.model.PositionPresetUIModel
 import com.example.core.model.StudentUiModel
 import com.example.core.model.Team
+import com.example.core.model.UserTeamInfoModel
 import com.example.network_api.entity.Member
 import com.example.network_api.entity.PositionPreset
 import com.example.network_api.entity.RemoteScreen
 import com.example.network_api.response.ClubInfoResponse
+import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.JoinedClubDataResponse
 import com.example.network_api.response.JoinedClubInfoResponse
 import com.example.network_api.response.MainHomeScheduleResponse
@@ -28,6 +32,7 @@ import com.example.network_api.response.SearchClubResponse
 import com.example.network_api.response.Student
 import com.example.network_api.response.TeamResponse
 import com.example.network_api.response.UserInfoResponse
+import com.example.network_api.response.UserTeamInfo
 
 object UiModelMapper {
     fun PositionPreset.mapToUiModel() =
@@ -211,5 +216,38 @@ object UiModelMapper {
     fun JoinedClubDataResponse.mapToUiModel() = JoinedClubData(
         id = this.id,
         uniqueNum = this.uniqueNum
+    )
+
+    fun RespResult<JoinedClubResponse>.mapToUiModel(): JoinedClub {
+        return when (this) {
+            is RespResult.Success -> {
+                Log.e("test",data.data.toString())
+                JoinedClub(
+                    status = data.status,
+                    message = data.message,
+                    data = data.data.map {
+                        it.mapToUiModel()
+                    }
+                )
+            }
+
+            is RespResult.Error -> {
+                JoinedClub(
+                    status = -1,
+                    message = this.error.code ?: "Unknown code",
+                    data = emptyList()
+                )
+            }
+        }
+    }
+
+    fun UserTeamInfo.mapToUiModel() = UserTeamInfoModel(
+        role= this.role,
+        introduce= this.introduce,
+        teamName= this.teamName,
+        unique_num= this.unique_num,
+        teamEmblem= this.teamEmblem,
+        createdAt= this.createdAt,
+        sizeOfUsers= this.sizeOfUsers
     )
 }
