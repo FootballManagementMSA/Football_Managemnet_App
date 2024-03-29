@@ -12,3 +12,9 @@ data class MakeClubResponse(
 data class UniqueNumberData(
    val uniqueNumber: String
 )
+
+data class MakeClubScheduleResponse(
+    val status: Int,
+    val message: String,
+    val code: String
+)

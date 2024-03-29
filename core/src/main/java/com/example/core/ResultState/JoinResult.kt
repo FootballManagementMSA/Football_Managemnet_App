@@ -1,4 +1,4 @@
-package com.example.core
+package com.example.core.ResultState
 
 sealed class JoinResult {
     data class Error(val errorMessage: String) : JoinResult()

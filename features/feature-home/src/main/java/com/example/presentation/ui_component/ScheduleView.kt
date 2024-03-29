@@ -70,7 +70,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ScheduleView(modifier: Modifier = Modifier, currentSchedule: State<List<MainSchedule?>>) {
+fun ScheduleView(
+    modifier: Modifier = Modifier,
+    currentSchedule: State<List<MainSchedule?>>,
+    onClick: () -> Unit
+) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     val tabs = listOf("일정")
@@ -119,7 +123,9 @@ fun ScheduleView(modifier: Modifier = Modifier, currentSchedule: State<List<Main
         when (selectedTabIndex) {
             0 -> {
                 if (currentSchedule.value.isEmpty()) {
-                    EmptyScheduleContent()
+                    EmptyScheduleContent {
+                        onClick()
+                    }
                 } else {
                     DefaultListView(
                         modifier = Modifier
@@ -242,7 +248,7 @@ private fun TeamInfo(modifier: Modifier = Modifier, team: String) {
 }
 
 @Composable
-fun EmptyScheduleContent() {
+fun EmptyScheduleContent(onClick: () -> Unit) {
     val config = LocalConfiguration.current
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -269,7 +275,9 @@ fun EmptyScheduleContent() {
                 modifier = Modifier.width(config.screenWidthDp.dp / 2),
                 icon = Icons.Default.DateRange,
                 content = "일정 생성"
-            ) {}
+            ) {
+                onClick()
+            }
         }
     }
 }
@@ -294,21 +302,25 @@ fun ScheduleViewPreview() {
     val state = remember {
         mutableStateOf(generateDummyData(5))
     }
-    ScheduleView(currentSchedule = state)
+    ScheduleView(currentSchedule = state) {
+
+    }
 }
 
 
 @Composable
 @Preview
 fun EmptyScheduleContentPreview() {
-    EmptyScheduleContent()
+    EmptyScheduleContent {
+
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun generateDummyData(count: Int): List<MainSchedule> {
     val dummyLocations = listOf("Stadium A", "Stadium B", "Stadium C", "Stadium D", "Stadium E")
     val dummyDates = listOf("2022-01-01", "2022-02-15", "2022-03-10", "2022-04-20", "2022-05-05")
-    val dummyTeams = listOf(Team("test",""), Team("test2",""), Team("test3",""))
+    val dummyTeams = listOf(Team("test", ""), Team("test2", ""), Team("test3", ""))
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 

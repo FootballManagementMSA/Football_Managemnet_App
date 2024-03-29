@@ -6,3 +6,8 @@ sealed class MakeClubResult {
     data object Initial : MakeClubResult()
     data object Loading : MakeClubResult()
 }
+
+sealed class MakeClubScheduleResult {
+    data class Success(val uniqueNumber: Int) : MakeClubScheduleResult()
+    data class Error(val errorMessage: String) : MakeClubScheduleResult()
+}

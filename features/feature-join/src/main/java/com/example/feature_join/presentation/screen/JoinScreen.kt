@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.core.JoinResult
+import com.example.core.ResultState.JoinResult
 import com.example.feature_join.presentation.ui_component.InputView_OnlyNum
 import com.example.feature_join.presentation.viewmodel.JoinViewModel
 import com.example.ui_component.buttons.CustomGradientButton_1

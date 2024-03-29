@@ -53,7 +53,7 @@ fun ClubIdInfoBox(text: String) {
         )
 
     }
-    VerticalSpacer(value = 110)
+    VerticalSpacer(value = 20)
 }
 
 @Composable

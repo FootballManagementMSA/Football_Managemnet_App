@@ -15,6 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.feature_makeclub.presentation.ui_component.make_club.ClubDetailsInputField
+import com.example.feature_makeclub.presentation.ui_component.make_club.ClubDetailsView
 import com.example.feature_makeclub.presentation.ui_component.make_club.ClubIdInfoBox
 import com.example.feature_makeclub.presentation.ui_component.make_club.ClubNameInputField
 import com.example.feature_makeclub.presentation.ui_component.make_club.ClubNameView
@@ -31,6 +33,7 @@ fun MakeClubScreen(
 ) {
     val scrollState = rememberScrollState()
     val clubName = viewModel.clubName.collectAsState("")
+    val clubDetails = viewModel.clubDetails.collectAsState("")
     val context = LocalContext.current
 
     Column(
@@ -52,6 +55,8 @@ fun MakeClubScreen(
             state = clubName,
             onValueChange = { viewModel.updateClubName(it) })
         ClubIdInfoBox(text = "중복되는 이름도 신규 생성 가능합니다.")
+        ClubDetailsView()
+        ClubDetailsInputField(state = clubDetails, onValueChange = { viewModel.updateClubDetails(it) })
         CustomGradientButton(
             gradientColors = gradientColorsList,
             cornerRadius = 16.dp,

@@ -1,5 +1,8 @@
 package com.example.footballmanager_pj
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -10,11 +13,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.feature_clubpage.presentation.screen.ClubPageScreen
 import com.example.feature_join.presentation.screen.JoinScreen
 import com.example.feature_join.presentation.screen.JoinSuccessScreen1
 import com.example.feature_join.presentation.screen.ProfileSettingScreen
 import com.example.feature_join.presentation.viewmodel.JoinViewModel
 import com.example.feature_joinclub.presentation.screen.ClubSearchScreen
+import com.example.feature_clubpage.presentation.screen.ClubPageScreen
+import com.example.feature_join.presentation.screen.StudentVerificationScreen
 import com.example.feature_joinclub.presentation.screen.JoinClubScreen
 import com.example.feature_joinclub.presentation.viewmodel.ClubSearchViewModel
 import com.example.feature_login.presentation.screen.LoginScreen
@@ -27,9 +33,12 @@ import com.example.feature_mypage.presentation.screen.MyPageScreen
 import com.example.feature_mypage.presentation.viewmodel.MyPageViewModel
 import com.example.feature_navigation.Route
 import com.example.feature_navigation.showBarList
+import com.example.feature_schedule.presentation.view.MakeScheduleScreen
+import com.example.feature_schedule.presentation.viewmodel.ScheduleViewModel
 import com.example.feature_squard.presentation.screen.SquadScreen
 import com.example.presentation.screen.HomeScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FootBallManagerAppNavigator(
     navHostController: NavHostController,
@@ -37,9 +46,11 @@ fun FootBallManagerAppNavigator(
     onNavigate: (String) -> Unit
 ) {
     val myPageViewModel: MyPageViewModel = hiltViewModel()
-    val joinViewModel: JoinViewModel = hiltViewModel()
     val clubSearchViewModel: ClubSearchViewModel = hiltViewModel()
     val makeClubViewModel: MakeClubViewModel = hiltViewModel()
+    val scheduleViewModel: ScheduleViewModel = hiltViewModel()
+    val joinViewModel: JoinViewModel = hiltViewModel()
+
     NavHost(
         modifier = Modifier.padding(vertical = if (showBarList.contains(uiRoute.value)) 60.dp else 0.dp),
         navController = navHostController,
@@ -51,7 +62,17 @@ fun FootBallManagerAppNavigator(
         }
         composable(Route.LOGIN) {
             onNavigate(Route.LOGIN)
-            LoginScreen(navHostController)
+            LoginScreen(
+                navHostController,
+                onNavigateToStudentVertificationScreen = {
+                    navHostController.navigate("STUDENT_VERIFICATION") })
+        }
+        composable(Route.STUDENT_VERIFICATION) {
+            onNavigate(Route.STUDENT_VERIFICATION)
+            StudentVerificationScreen(navHostController,
+                onNavigateToJoinScreen = { navHostController.navigate("JOIN") })
+
+
         }
         composable(Route.JOIN) {
             JoinScreen(
@@ -61,6 +82,12 @@ fun FootBallManagerAppNavigator(
                 },
             )
         }
+        composable("make_schedule") {
+            MakeScheduleScreen { id, schedule ->
+                Log.e("123", "$id $schedule")
+                scheduleViewModel.makeClub(id, schedule)
+            }
+        }
         composable(Route.PROFILE_SETTING) {
             onNavigate(Route.PROFILE_SETTING)
             ProfileSettingScreen(
@@ -69,7 +96,7 @@ fun FootBallManagerAppNavigator(
         }
         composable(Route.JOIN_SUCCESS) {
             onNavigate(Route.JOIN_SUCCESS)
-            JoinSuccessScreen1 (onNavigateToLoginScreen = {
+            JoinSuccessScreen1(onNavigateToLoginScreen = {
                 navHostController.navigate("LOGIN")
             })
         }
@@ -150,7 +177,17 @@ fun FootBallManagerAppNavigator(
         }
         composable(Route.CLUB_SEARCH) {
             onNavigate(Route.CLUB_SEARCH)
-            ClubSearchScreen(clubSearchViewModel.searchedClub.collectAsState(), clubSearchViewModel.searchValue.collectAsState().value)
+            ClubSearchScreen(
+                onJoinIconClick = { clubSearchViewModel.searchedClub },
+                onNavigateToRequestJoin = {
+                    navHostController.navigate("CLUB_PAGE") {
+                    }
+                },
+                clubSearchViewModel,
+
+                clubSearchViewModel.searchedClub.collectAsState(),
+                clubSearchViewModel.searchValue.collectAsState().value
+            )
         }
     }
 }

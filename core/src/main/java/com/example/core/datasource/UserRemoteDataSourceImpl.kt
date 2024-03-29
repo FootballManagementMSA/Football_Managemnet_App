@@ -1,11 +1,13 @@
 package com.example.core.datasource
 
 import android.util.Log
-import com.example.core.JoinResult
 import com.example.core.ResultState.BaseResult
+import com.example.core.ResultState.ClubJoinRequestResult
 import com.example.core.ResultState.LoginResult
+import com.example.core.ResultState.JoinResult
 import com.example.core.mapper.EntityMapper.mapToEntity
 import com.example.core.mapper.UiModelMapper.mapToUiModel
+import com.example.core.model.ClubJoinRequestModel
 import com.example.core.model.JoinModel
 import com.example.core.model.LoginModel
 import com.example.core.model.ModifyUserInfoModel
@@ -36,6 +38,23 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
             }
         }
 
+
+    }
+
+    override suspend fun clubJoinRequest(clubJoinRequestModel: ClubJoinRequestModel): ClubJoinRequestResult {
+
+        val result=userRepository.clubJoinRequest(clubJoinRequestModel.mapToEntity())
+
+        return when(result){
+            is RespResult.Success ->{
+                ClubJoinRequestResult.Success(result.data.message)
+
+            }
+            is RespResult.Error ->{
+                ClubJoinRequestResult.Error(result.error.errorMessage)
+
+            }
+        }
 
     }
 

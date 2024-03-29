@@ -1,6 +1,8 @@
-package com.example.feature_schedule
+package com.example.feature_schedule.presentation.view
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.calendar.Calendar
+import com.example.core.model.ClubSchedule
 import com.example.ui_component.R
 import com.example.ui_component.buttons.CustomGradientButton
 import com.example.ui_component.template.DefaultBottomSheet
@@ -42,9 +45,13 @@ import com.example.ui_component.values.gradientColorsList
 import com.example.ui_component.values.mainTheme
 import com.example.ui_component.values.middleFont
 import com.example.ui_component.values.tinyFont
+import java.time.LocalDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MakeScheduleScreen() {
+fun MakeScheduleScreen(
+    onMake: (Long, ClubSchedule) -> Unit
+) {
     val myUri = remember { mutableStateOf<Uri?>(null) }
     val otherUserUri = remember { mutableStateOf<Uri?>(null) }
     val title = remember { mutableStateOf("") }
@@ -73,7 +80,7 @@ fun MakeScheduleScreen() {
         ScheduleLocationView(location)
         Spacer(modifier = Modifier.weight(0.4f))
         Text("상대팀 설정", color = Color.Gray)
-        SetTeamView(myUri,otherUserUri)
+        SetTeamView(myUri, otherUserUri)
         Spacer(modifier = Modifier.weight(1f))
         CustomGradientButton(
             gradientColors = gradientColorsList,
@@ -81,14 +88,26 @@ fun MakeScheduleScreen() {
             buttonText = "수락하기",
             roundedCornerShape = RoundedCornerShape(8.dp)
         ) {
-
+            onMake(
+                0L,
+                ClubSchedule(
+                    title = title.value,
+                    memo = memo.value,
+                    startTime = LocalDateTime.now(),
+                    endTime = LocalDateTime.now(),
+                    place = "",
+                    awayTeamId = 0L,
+                    longitude = 0.0,
+                    latitude = 0.0
+                )
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
     }
 }
 
 @Composable
-private fun SetTeamView(myUri: MutableState<Uri?>,otherUserUri: MutableState<Uri?>) {
+private fun SetTeamView(myUri: MutableState<Uri?>, otherUserUri: MutableState<Uri?>) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         DefaultEmblemSelectIconView(
             modifier = Modifier
@@ -257,7 +276,9 @@ private fun CalendarSheet(
 @Preview
 @Composable
 fun MakeScheduleScreenPreview() {
-    MakeScheduleScreen()
+    MakeScheduleScreen { a, b ->
+
+    }
 }
 
 

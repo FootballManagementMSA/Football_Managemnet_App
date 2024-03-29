@@ -45,7 +45,8 @@ val LocalLoginScreenPreviewMode: ProvidableCompositionLocal<Boolean> = compositi
 
 @Composable
 fun LoginScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    onNavigateToStudentVertificationScreen: () -> Unit
 ) {
     if (LocalLoginScreenPreviewMode.current) {
         PreviewLoginScreen()
@@ -137,6 +138,7 @@ fun LoginScreen(
                     textColor = Color(0xFF857FEB),
                     roundedCornerShape = RoundedCornerShape(20.dp)
                 ) {
+                    onNavigateToStudentVertificationScreen()
                 }
             }
             if (loginResult is LoginResult.Loading) {
@@ -209,6 +211,7 @@ fun PreviewLoginScreen() {
             textColor = Color(0xFF857FEB),
             roundedCornerShape = RoundedCornerShape(20.dp)
         ) {
+
         }
     }
 }
@@ -217,6 +220,6 @@ fun PreviewLoginScreen() {
 @Composable
 fun LoginScreenPreview() {
     CompositionLocalProvider(LocalLoginScreenPreviewMode provides true) {
-        LoginScreen(navHostController = rememberNavController())
+        LoginScreen(navHostController = rememberNavController(),{})
     }
 }

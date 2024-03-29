@@ -3,11 +3,12 @@ package com.example.feature_join.presentation.viewmodel
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.layout.LookaheadScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.JoinResult
+import com.example.core.ResultState.JoinResult
+import com.example.core.ResultState.LoginResult
 import com.example.core.model.JoinModel
+import com.example.core.model.LoginModel
 import com.example.feature_join.domain.usecase.JoinUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -54,6 +55,22 @@ class JoinViewModel @Inject constructor(
     private val _JoinResult = MutableSharedFlow<JoinResult>(replay = 1)
     val JoinResult: SharedFlow<JoinResult> = _JoinResult.asSharedFlow()
 
+    //추후 백엔드 재학생 인증 api 생성시 연결작업을 위한 주석처리
+/*
+    private val _loginResult = MutableSharedFlow<LoginResult>(replay = 1)
+    val loginResult: SharedFlow<LoginResult> = _loginResult.asSharedFlow()
+
+
+
+    fun login() {
+        viewModelScope.launch {
+            _loginResult.emit(LoginResult.Loading)
+            val result = JoinUseCase(LoginModel(_userId.value, _userPassword.value))
+            _loginResult.emit(result)
+        }
+    }
+    */
+
 
     fun join() {
         viewModelScope.launch {
@@ -63,8 +80,8 @@ class JoinViewModel @Inject constructor(
 
             val result = joinUseCase(
                 JoinModel(
-                    "18011771",
-                    "chanhue467",
+                    _userId.value,
+                    _userPassword.value,
                     _userPosition.value,
                     _userFoot.value,
                     _userGender.value,
@@ -75,6 +92,16 @@ class JoinViewModel @Inject constructor(
             _JoinResult.emit(result)
         }
     }
+
+
+    fun updateUserId(userId: String) {
+        _userId.value = userId
+    }
+
+    fun updateUserPassword(userPassword: String) {
+        _userPassword.value = userPassword
+    }
+
 
 
     fun updateSelectedInfo(position: String = "", foot: String = "") {

@@ -37,12 +37,13 @@ fun HomeScreen(
 ) {
     val uiState = mainHomeViewModel.uiState.collectAsState()
     val scheduleUiState = mainHomeViewModel.scheduleUiState.collectAsState()
-    var studentData: StudentUiModel?= null
+    var studentData : StudentUiModel?= null
     var scheduleData: List<MainSchedule?> = emptyList()
 
     LaunchedEffect(Unit){
         mainHomeViewModel.getResponse()
         mainHomeViewModel.getScheduleData()
+        mainHomeViewModel.getJoinedClubInfo()
     }
 
     when (uiState.value) {
@@ -95,7 +96,9 @@ fun HomeScreen(
                 Modifier
                     .requiredHeightIn(min = 400.dp)
                     .weight(7f), mutableStateOf(scheduleData)
-            )
+            ) {
+                navHostController.navigate("make_schedule")
+            }
         }
     }
 

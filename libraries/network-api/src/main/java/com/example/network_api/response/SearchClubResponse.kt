@@ -8,8 +8,9 @@ data class SearchClubResponse(
 
 data class ClubInfoResponse(
     val teamId: Int,
-    val teamName: String,
+    val teamName: String?,
     val totalMemberCnt: Int,
+    val details: String?,
     val uniqueNum: String,
     val emblem: String
 )

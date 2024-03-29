@@ -25,11 +25,14 @@ import javax.inject.Inject
 class MakeClubViewModel @Inject constructor(
     private val contentResolver: ContentResolver,
     private val sendClubInfoDataUseCase: SendClubInfoDataUseCase
-): ViewModel() {
+) : ViewModel() {
     private val _clubName = MutableStateFlow("")
     val clubName: StateFlow<String> = _clubName
 
-    private  val _selectedImageUri = MutableStateFlow<Uri?>(null)
+    private val _clubDetails = MutableStateFlow("")
+    val clubDetails: StateFlow<String> = _clubDetails
+
+    private val _selectedImageUri = MutableStateFlow<Uri?>(null)
     val selectedImageUri: StateFlow<Uri?> = _selectedImageUri
 
     private val _uiState = MutableStateFlow<MakeClubResult>(MakeClubResult.Initial)
@@ -38,6 +41,12 @@ class MakeClubViewModel @Inject constructor(
     fun updateClubName(clubName: String) {
         viewModelScope.launch {
             _clubName.emit(clubName)
+        }
+    }
+
+    fun updateClubDetails(clubDetails: String) {
+        viewModelScope.launch {
+            _clubDetails.emit(clubDetails)
         }
     }
 
@@ -50,16 +59,19 @@ class MakeClubViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(MakeClubResult.Loading)
             val file: File = if (_selectedImageUri.value != null) {
-                val cursor = contentResolver.query(_selectedImageUri.value!!, null, null, null, null)
+                val cursor =
+                    contentResolver.query(_selectedImageUri.value!!, null, null, null, null)
                 cursor?.moveToNext()
-                val path = cursor?.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA))
+                val path =
+                    cursor?.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA))
                 File(path)
             } else {
                 val drawableId = R.drawable.sejong_mark
                 val tempFileName = "default_mark.png"
                 drawableToFile(context, drawableId, tempFileName)
             }
-            _uiState.value = sendClubInfoDataUseCase(MakeClubModel(_clubName.value, file))
+            _uiState.value =
+                sendClubInfoDataUseCase(MakeClubModel(_clubName.value, _clubDetails.value, file))
         }
     }
 
