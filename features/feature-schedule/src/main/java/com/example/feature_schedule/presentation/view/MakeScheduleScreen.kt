@@ -47,6 +47,7 @@ import com.example.ui_component.values.mainTheme
 import com.example.ui_component.values.middleFont
 import com.example.ui_component.values.tinyFont
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -93,21 +94,26 @@ fun MakeScheduleScreen(
             roundedCornerShape = RoundedCornerShape(8.dp)
         ) {
             onMake(
-                0L,
+                0L, // 내 팀 아이디
                 ClubSchedule(
                     title = title.value,
                     memo = memo.value,
-                    startTime = LocalDateTime.now(),
-                    endTime = LocalDateTime.now(),
-                    place = "",
-                    awayTeamId = 0L,
-                    longitude = 0.0,
-                    latitude = 0.0
+                    startTime = parseToLocalDateTime(startDate.value),
+                    endTime = parseToLocalDateTime(endDate.value),
+                    place = "", // 장소 시트
+                    awayTeamId = 0L, // 자동완성 시트
+                    longitude = 0.0, // 장소 시트
+                    latitude = 0.0 // 장소 시트
                 )
             )
         }
         Spacer(modifier = Modifier.weight(1f))
     }
+}
+
+fun parseToLocalDateTime(dateString: String): LocalDateTime {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return LocalDateTime.parse(dateString, formatter)
 }
 
 @Composable
