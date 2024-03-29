@@ -1,7 +1,5 @@
 package com.example.network_api.response
 
-import java.time.LocalDateTime
-
 data class JoinedClubResponse(
     val status: Int,
     val message: String,
@@ -14,6 +12,6 @@ data class UserTeamInfo(
     val teamName: String,
     val unique_num: String,
     val teamEmblem: String,
-    val createdAt: LocalDateTime,
+    val createdAt: String,
     val sizeOfUsers: Int
 )
