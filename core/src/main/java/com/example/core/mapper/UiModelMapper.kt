@@ -2,6 +2,8 @@ package com.example.core.mapper
 
 import com.example.core.model.Club
 import com.example.core.model.ClubInfo
+import com.example.core.model.JoinedClubData
+import com.example.core.model.JoinedClubInfo
 import com.example.core.model.LocalScreen
 import com.example.core.model.MainHomeScheduleUiModel
 import com.example.core.model.MainHomeStudentDataUiModel
@@ -16,6 +18,8 @@ import com.example.network_api.entity.Member
 import com.example.network_api.entity.PositionPreset
 import com.example.network_api.entity.RemoteScreen
 import com.example.network_api.response.ClubInfoResponse
+import com.example.network_api.response.JoinedClubDataResponse
+import com.example.network_api.response.JoinedClubInfoResponse
 import com.example.network_api.response.MainHomeScheduleResponse
 import com.example.network_api.response.MainHomeStudentDataResponse
 import com.example.network_api.response.MainScheduleResponse
@@ -80,7 +84,7 @@ object UiModelMapper {
     }
 
     fun Student.mapToUiModel() = StudentUiModel(
-        name= this.name,
+        name = this.name,
         game = this.game,
         goal = this.goal,
         position = this.position,
@@ -181,4 +185,31 @@ object UiModelMapper {
             }
         }
     }
+
+    fun RespResult<JoinedClubInfoResponse>.mapToUiModel(): JoinedClubInfo {
+        return when (this) {
+            is RespResult.Success -> {
+                JoinedClubInfo(
+                    status = data.status,
+                    code = data.code ?: "",
+                    message = data.message,
+                    data = data.data.map { it.mapToUiModel() }
+                )
+            }
+
+            is RespResult.Error -> {
+                JoinedClubInfo(
+                    status = -1,
+                    code = this.error.code ?: "Unknown code",
+                    message = this.error.errorMessage,
+                    data = emptyList()
+                )
+            }
+        }
+    }
+
+    fun JoinedClubDataResponse.mapToUiModel() = JoinedClubData(
+        id = this.id,
+        uniqueNum = this.uniqueNum
+    )
 }

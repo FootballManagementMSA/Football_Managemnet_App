@@ -43,6 +43,7 @@ fun HomeScreen(
     LaunchedEffect(Unit){
         mainHomeViewModel.getResponse()
         mainHomeViewModel.getScheduleData()
+        mainHomeViewModel.getJoinedClubInfo()
     }
 
     when (uiState.value) {

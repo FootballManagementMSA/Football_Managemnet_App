@@ -1,5 +1,6 @@
 package com.example.network_api.api
 
+import com.example.network_api.response.JoinedClubInfoResponse
 import com.example.network_api.response.MainHomeScheduleResponse
 import com.example.network_api.response.MainHomeStudentDataResponse
 import retrofit2.Response
@@ -12,4 +13,7 @@ interface MainHomeApi {
 
     @GET("/api/user-service/schedule")
     suspend fun loadSchedule(): Response<MainHomeScheduleResponse>
+
+    @GET("/api/user-service/team")
+    suspend fun getJoinedClubInfo(): Response<JoinedClubInfoResponse>
 }
