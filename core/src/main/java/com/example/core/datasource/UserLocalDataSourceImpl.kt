@@ -35,7 +35,7 @@ internal class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveUniqueNumber(uniqueNumber: String) {
+    override suspend fun saveSelectedTeamUniqueNumber(uniqueNumber: String) {
         dataStore.edit {
             it[PreferenceKeys.UNIQUE_NUMBER] = uniqueNumber
         }
@@ -66,5 +66,9 @@ internal class UserLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getUserId(): Long {
         return dataStore.data.first()[PreferenceKeys.USER_ID] ?: 0
+    }
+
+    override suspend fun getSelectedTeamUniqueNumber(): String {
+        return dataStore.data.first()[PreferenceKeys.UNIQUE_NUMBER] ?: ""
     }
 }

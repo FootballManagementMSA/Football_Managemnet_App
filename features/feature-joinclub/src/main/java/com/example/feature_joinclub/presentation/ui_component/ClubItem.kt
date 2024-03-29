@@ -1,6 +1,7 @@
 package com.example.feature_joinclub.presentation.ui_component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,8 +59,7 @@ fun ClubItem(
 
                     if (selectedIndex.value == index) {
                         selectedIndex.value = -1
-                    }
-                    else {
+                    } else {
                         selectedIndex.value = index
                         on()
                     }
@@ -128,11 +128,19 @@ fun ClubContent(club: ClubInfo) {
 }
 
 @Composable
-fun JoinedClubContent(club: UserTeamInfoModel) {
+fun JoinedClubContent(
+    club: UserTeamInfoModel,
+    onNavigateToClubPage: () -> Unit,
+    saveUniqueNum: (String) -> Unit,
+) {
     Row(
         Modifier
             .padding(20.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .clickable {
+                saveUniqueNum(club.unique_num)
+                onNavigateToClubPage()
+            },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(Modifier) {
@@ -180,6 +188,6 @@ fun ClubItemPreview() {
     ClubItem(selectedIndex = selectedIndex, index = 1, {}) {
         ClubContent(club = ClubInfo(3, "teamname", 20, "unique", "", ""))
     }
-    
+
 
 }
