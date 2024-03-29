@@ -1,17 +1,14 @@
 package com.example.feature_joinclub.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.ResultState.ClubJoinRequestResult
-import com.example.core.ResultState.JoinResult
 import com.example.core.model.ClubInfo
-import com.example.core.model.UserTeamInfoModel
 import com.example.core.model.ClubJoinRequestModel
-import com.example.core.model.JoinModel
+import com.example.core.model.UserTeamInfoModel
 import com.example.coroutine.IoDispatcher
-import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
 import com.example.feature_joinclub.domain.usecase.ClubJoinRequestUseCase
+import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
 import com.example.feature_joinclub.domain.usecase.SearchClubUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -45,13 +42,8 @@ class ClubSearchViewModel @Inject constructor(
     private val _JoinResult = MutableSharedFlow<ClubJoinRequestResult>(replay = 1)
     val JoinResult: SharedFlow<ClubJoinRequestResult> = _JoinResult.asSharedFlow()
 
-
     private val _joinedClub = MutableStateFlow<List<UserTeamInfoModel>>(listOf())
     val joinedClub : StateFlow<List<UserTeamInfoModel>> = _joinedClub
-
-    init {
-        getJoinedClubList()
-    }
 
     fun searchClub(clubName: String) {
         _searchValue.value = clubName
@@ -73,7 +65,6 @@ class ClubSearchViewModel @Inject constructor(
 
 
     }
-
 
     fun getJoinedClubList() {
         viewModelScope.launch(ioDispatcher) {

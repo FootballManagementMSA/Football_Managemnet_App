@@ -13,5 +13,5 @@ interface ClubRepository {
     suspend fun sendClubInfo(name: RequestBody, details: RequestBody, emblem: MultipartBody.Part): RespResult<MakeClubResponse>
     suspend fun searchClub(code: String): RespResult<SearchClubResponse>
     suspend fun createClubSchedule(teamId: Long, clubSchedule: ClubSchedule) : RespResult<MakeClubScheduleResponse>
-    suspend fun getJoinedClub(): RespResult<JoinedClubResponse>
+    suspend fun getJoinedClub(userId: Long): RespResult<JoinedClubResponse>
 }
