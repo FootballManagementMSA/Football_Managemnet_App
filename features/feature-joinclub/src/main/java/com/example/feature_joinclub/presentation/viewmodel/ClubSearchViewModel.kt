@@ -9,6 +9,7 @@ import com.example.core.model.UserTeamInfoModel
 import com.example.coroutine.IoDispatcher
 import com.example.feature_joinclub.domain.usecase.ClubJoinRequestUseCase
 import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamUniqueNumUseCase
 import com.example.feature_joinclub.domain.usecase.SearchClubUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,6 +26,7 @@ class ClubSearchViewModel @Inject constructor(
     private val searchClubUseCase: SearchClubUseCase,
     private val clubJoinRequestUseCase: ClubJoinRequestUseCase,
     private val getJoinedClubUseCase: GetJoinedClubUseCase,
+    private val saveSelectedTeamUniqueNumUseCase: SaveSelectedTeamUniqueNumUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ViewModel(){
     private val _searchValue = MutableStateFlow("")
@@ -44,6 +46,10 @@ class ClubSearchViewModel @Inject constructor(
 
     private val _joinedClub = MutableStateFlow<List<UserTeamInfoModel>>(listOf())
     val joinedClub : StateFlow<List<UserTeamInfoModel>> = _joinedClub
+
+    init {
+        getJoinedClubList()
+    }
 
     fun searchClub(clubName: String) {
         _searchValue.value = clubName
@@ -72,4 +78,9 @@ class ClubSearchViewModel @Inject constructor(
         }
     }
 
+    fun saveSelectedTeamUniqueNum(uniqueNum: String) {
+        viewModelScope.launch {
+            saveSelectedTeamUniqueNumUseCase(uniqueNum)
+        }
+    }
 }
