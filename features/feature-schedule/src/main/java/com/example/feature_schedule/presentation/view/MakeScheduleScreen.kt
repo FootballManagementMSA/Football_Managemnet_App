@@ -2,6 +2,7 @@ package com.example.feature_schedule.presentation.view
 
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,9 +36,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.auto_complete.AutoCompleteSearchBox
 import com.example.calendar.Calendar
+import com.example.core.model.ClubInfo
 import com.example.core.model.ClubSchedule
+import com.example.ui_component.HorizontalSpacer
 import com.example.ui_component.R
 import com.example.ui_component.buttons.CustomGradientButton
 import com.example.ui_component.template.DefaultBottomSheet
@@ -63,11 +69,15 @@ fun MakeScheduleScreen(
     val showCalendar = remember { mutableStateOf(false) }
     val showAutoComplete = remember { mutableStateOf(false) }
     val setStart = remember { mutableStateOf(false) }
+    val selectedClub = remember { mutableStateOf<ClubInfo?>(null) }
     if (showCalendar.value) {
         CalendarSheet(showCalendar, setStart, startDate, endDate)
     }
     if (showAutoComplete.value) {
-        AutoCompleteSheet(showAutoComplete = showAutoComplete)
+        AutoCompleteSheet(showAutoComplete = showAutoComplete) {
+            selectedClub.value = it
+            showAutoComplete.value = false
+        }
     }
     Column(
         Modifier
@@ -85,7 +95,7 @@ fun MakeScheduleScreen(
         ScheduleLocationView(location)
         Spacer(modifier = Modifier.weight(0.4f))
         Text("상대팀 설정", color = Color.Gray)
-        SetTeamView(myUri, showAutoComplete)
+        SetTeamView(myUri, showAutoComplete, selectedClub)
         Spacer(modifier = Modifier.weight(1f))
         CustomGradientButton(
             gradientColors = gradientColorsList,
@@ -101,7 +111,7 @@ fun MakeScheduleScreen(
                     startTime = parseToLocalDateTime(startDate.value),
                     endTime = parseToLocalDateTime(endDate.value),
                     place = "", // 장소 시트
-                    awayTeamId = 0L, // 자동완성 시트
+                    awayTeamId = selectedClub.value?.teamId?.toLong() ?: 0L, // 자동완성 시트
                     longitude = 0.0, // 장소 시트
                     latitude = 0.0 // 장소 시트
                 )
@@ -117,7 +127,11 @@ fun parseToLocalDateTime(dateString: String): LocalDateTime {
 }
 
 @Composable
-private fun SetTeamView(myUri: MutableState<Uri?>, showAutoComplete: MutableState<Boolean>) {
+private fun SetTeamView(
+    myUri: MutableState<Uri?>,
+    showAutoComplete: MutableState<Boolean>,
+    selectedClubInfo: MutableState<ClubInfo?>
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         DefaultEmblemSelectIconView(
             modifier = Modifier
@@ -136,15 +150,14 @@ private fun SetTeamView(myUri: MutableState<Uri?>, showAutoComplete: MutableStat
             color = Color.Gray,
             fontSize = middleFont
         )
-        Box(
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(emblem)
-                .size(40.dp)
-                .padding(top = 5.dp)
-                .clickable {
-                    showAutoComplete.value = true
-                },
+        AsyncImage(modifier = Modifier
+            .clip(CircleShape)
+            .background(emblem)
+            .size(40.dp)
+            .padding(top = 5.dp)
+            .clickable {
+                showAutoComplete.value = true
+            }, model = selectedClubInfo.value?.emblem, contentDescription = ""
         )
     }
 }
@@ -284,14 +297,19 @@ private fun CalendarSheet(
 
 @Composable
 private fun AutoCompleteSheet(
-    showAutoComplete: MutableState<Boolean>
+    showAutoComplete: MutableState<Boolean>,
+    onSelect: (ClubInfo) -> Unit
 ) {
-    DefaultBottomSheet(onDismiss = { showAutoComplete.value = false }) {
+    DefaultBottomSheet(
+        modifier = Modifier.fillMaxHeight(0.6f),
+        onDismiss = { showAutoComplete.value = false }) {
         AutoCompleteSearchBox(
             placeholder = "상대 구단을 검색해주세요.",
-            items = listOf<Int>(),
-            itemFilter = { it.toString() }) {
-
+            onSelect = onSelect
+        ) {
+            Text(text = it.teamName.toString())
+            HorizontalSpacer(value = 5)
+            Text(fontSize = 10.sp, text = "구단 고유 코드 : ${it.uniqueNum}")
         }
     }
 }
