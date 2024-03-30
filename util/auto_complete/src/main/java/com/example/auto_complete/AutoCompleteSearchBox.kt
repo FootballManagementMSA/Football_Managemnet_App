@@ -43,6 +43,7 @@ fun AutoCompleteSearchBox(
     modifier: Modifier = Modifier,
     placeholder: String,
     viewModel: AutoCompleteViewModel = hiltViewModel(),
+    onSelect: (ClubInfo) -> Unit = {},
     content: @Composable (ClubInfo) -> Unit
 ) {
     val expanded = viewModel.expanded.collectAsState()
@@ -67,6 +68,7 @@ fun AutoCompleteSearchBox(
             expanded = expanded,
             items = items.value,
             onSearchValueSelect = {
+                onSelect(it)
                 viewModel.updateSearchValue(it.teamName.toString())
                 viewModel.updateExpandedValue(false)
             },
