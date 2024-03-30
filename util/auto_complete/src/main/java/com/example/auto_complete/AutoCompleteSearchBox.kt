@@ -26,9 +26,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -39,18 +36,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.core.model.ClubInfo
 
 @Composable
-fun <T> AutoCompleteSearchBox(
+fun AutoCompleteSearchBox(
     modifier: Modifier = Modifier,
     placeholder: String,
-    items: List<T>,
-    itemFilter: (T) -> String,
     viewModel: AutoCompleteViewModel = hiltViewModel(),
-    content: @Composable (T) -> Unit
+    content: @Composable (ClubInfo) -> Unit
 ) {
     val expanded = viewModel.expanded.collectAsState()
     val searchValue = viewModel.searchValue.collectAsState()
+    val items = viewModel.items.collectAsState()
     Column(
         modifier = modifier
             .padding(30.dp)
@@ -60,19 +57,17 @@ fun <T> AutoCompleteSearchBox(
         AutoCompleteTextField(
             searchValue = searchValue,
             expanded = { viewModel.updateExpandedValue(!expanded.value) },
-            placeholder = placeholder
+            placeholder = placeholder,
+            onIconClick = { viewModel.fetchItems(searchValue.value)}
         ) {
             viewModel.updateSearchValue(it)
-            viewModel.updateExpandedValue(true)
         }
 
         SearchDropdown(
             expanded = expanded,
-            items = items,
-            itemFilter = itemFilter,
-            searchValue = searchValue,
+            items = items.value,
             onSearchValueSelect = {
-                viewModel.updateSearchValue(itemFilter(it))
+                viewModel.updateSearchValue(it.teamName.toString())
                 viewModel.updateExpandedValue(false)
             },
         ) {
@@ -86,6 +81,7 @@ fun AutoCompleteTextField(
     searchValue: State<String>,
     expanded: () -> Unit,
     placeholder: String,
+    onIconClick: () -> Unit,
     onValueChange: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -120,6 +116,7 @@ fun AutoCompleteTextField(
             ),
             trailingIcon = {
                 IconButton(onClick = {
+                    onIconClick()
                     expanded()
                     focusManager.clearFocus()
                 }) {
@@ -138,26 +135,12 @@ fun AutoCompleteTextField(
 }
 
 @Composable
-fun <T> SearchDropdown(
+fun SearchDropdown(
     expanded: State<Boolean>,
-    items: List<T>,
-    itemFilter: (T) -> String,
-    searchValue: State<String>,
-    onSearchValueSelect: (T) -> Unit,
-    content: @Composable (T) -> Unit
+    items: List<ClubInfo>,
+    onSearchValueSelect: (ClubInfo) -> Unit,
+    content: @Composable (ClubInfo) -> Unit
 ) {
-    val filteredItems by remember(searchValue.value) {
-        mutableStateOf(
-            if (searchValue.value.isNotEmpty()) {
-                items.filter {
-                    itemFilter(it).lowercase().contains(searchValue.value.lowercase())
-                }.sortedBy { itemFilter(it) }
-            } else {
-                items.sortedBy { itemFilter(it) }
-            }
-        )
-    }
-
     AnimatedVisibility(visible = expanded.value) {
         Card(
             modifier = Modifier
@@ -171,7 +154,7 @@ fun <T> SearchDropdown(
                     .heightIn(max = 450.dp)
                     .testTag("SearchDropdown"),
             ) {
-                items(filteredItems) {
+                items(items) {
                     SearchItems(item = it, onSearchValueSelect = onSearchValueSelect) {
                         content(it)
                     }
@@ -182,7 +165,7 @@ fun <T> SearchDropdown(
 }
 
 @Composable
-fun <T> SearchItems(item: T, onSearchValueSelect: (T) -> Unit, content: @Composable () -> Unit) {
+fun SearchItems(item: ClubInfo, onSearchValueSelect: (ClubInfo) -> Unit, content: @Composable () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
