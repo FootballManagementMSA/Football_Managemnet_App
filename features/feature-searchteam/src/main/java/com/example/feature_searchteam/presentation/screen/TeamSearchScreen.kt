@@ -32,8 +32,6 @@ import com.example.ui_component.buttons.DarkButton
 import com.example.ui_component.template.DefaultBottomSheet
 import com.example.ui_component.values.bigFont
 
-data class TempClubInfo(val name: String, val code: String)
-
 @Composable
 fun TeamSearchScreen() {
     var showSheet by remember { mutableStateOf(false) }
@@ -55,7 +53,6 @@ fun TeamSearchScreen() {
 
 @Composable
 fun ClubSearchView(onDismiss: () -> Unit) {
-    val categoryList = dummy()
     Column(Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
         Header(Modifier.weight(2f), title = "상대팀 검색") {
             onDismiss()
@@ -63,14 +60,10 @@ fun ClubSearchView(onDismiss: () -> Unit) {
         AutoCompleteSearchBox(
             modifier = Modifier.weight(8f),
             placeholder = "상대 구단을 검색해주세요.",
-            items = categoryList,
-            itemFilter = {
-                it.name
-            }
         ) {
-            Text(text = it.name)
+            Text(text = it.teamName.toString())
             HorizontalSpacer(value = 5)
-            Text(fontSize = 10.sp, text = "구단 고유 코드 : ${it.code}")
+            Text(fontSize = 10.sp, text = "구단 고유 코드 : ${it.uniqueNum}")
         }
         DarkButton(
             Modifier
@@ -103,23 +96,6 @@ fun Header(modifier: Modifier = Modifier, title: String, onDismiss: () -> Unit) 
             imageVector = Icons.Default.Close,
             contentDescription = null,
             modifier = Modifier.clickable { onDismiss() })
-    }
-}
-
-@Composable
-fun dummy(): List<TempClubInfo> {
-    return remember {
-        listOf(
-            TempClubInfo("Liverpool", "2221"),
-            TempClubInfo("Arsenal", "2223"),
-            TempClubInfo("Man City", "33130"),
-            TempClubInfo("Manchest United", "4678"),
-            TempClubInfo("Brighton", "7890"),
-            TempClubInfo("brentford", "36458"),
-            TempClubInfo("Burnley", "w234"),
-            TempClubInfo("luton", "wy765"),
-            TempClubInfo("Siuuu", "133252")
-        )
     }
 }
 
