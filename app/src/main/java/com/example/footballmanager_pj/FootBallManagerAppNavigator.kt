@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.feature_clubpage.presentation.screen.ClubPageScreen
 import com.example.feature_join.presentation.screen.JoinScreen
 import com.example.feature_join.presentation.screen.JoinSuccessScreen1
 import com.example.feature_join.presentation.screen.ProfileSettingScreen
@@ -64,6 +65,10 @@ fun FootBallManagerAppNavigator(
                 navHostController,
                 onNavigateToStudentVertificationScreen = {
                     navHostController.navigate("STUDENT_VERIFICATION") })
+        }
+        composable(Route.CLUB_PAGE) {
+            onNavigate(Route.CLUB_PAGE)
+            ClubPageScreen()
         }
         composable(Route.STUDENT_VERIFICATION) {
             onNavigate(Route.STUDENT_VERIFICATION)
@@ -171,7 +176,13 @@ fun FootBallManagerAppNavigator(
                 getJoinedClub = {
                     clubSearchViewModel.getJoinedClubList()
                 },
-                joinedTeamList = clubSearchViewModel.joinedClub.collectAsState()
+                joinedTeamList = clubSearchViewModel.joinedClub.collectAsState(),
+                onNavigateToClubPage = {
+                    navHostController.navigate("CLUB_PAGE")
+                },
+                saveUniqueNum = {
+                    clubSearchViewModel.saveSelectedTeamUniqueNum(it)
+                }
             )
         }
         composable(Route.CLUB_SEARCH) {

@@ -27,7 +27,6 @@ class ClubDataSourceImpl @Inject constructor(
         )
         return when (result) {
             is RespResult.Success -> {
-                userLocalDataSource.saveUniqueNumber(result.data.unique.uniqueNumber)
                 MakeClubResult.Success(result.data.unique.uniqueNumber)
             }
 

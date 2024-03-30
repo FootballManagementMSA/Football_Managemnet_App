@@ -36,6 +36,8 @@ fun JoinClubScreen(
     onNavigateToClubSearch: () -> Unit,
     getJoinedClub: () -> Unit,
     joinedTeamList: State<List<UserTeamInfoModel>>,
+    onNavigateToClubPage: () -> Unit,
+    saveUniqueNum: (String) -> Unit,
 ) {
     val showSheet = remember {
         mutableStateOf(true)
@@ -44,7 +46,10 @@ fun JoinClubScreen(
         getJoinedClub()
     }
     if (showSheet.value) {
-        DefaultBottomSheet(onDismiss = { showSheet.value = false }, containerColor = bottomSheetColor) {
+        DefaultBottomSheet(
+            onDismiss = { showSheet.value = false },
+            containerColor = bottomSheetColor
+        ) {
             val selectedIndex = remember {
                 mutableStateOf(-1)
             }
@@ -62,7 +67,13 @@ fun JoinClubScreen(
                     itemsIndexed(
                         joinedTeamList.value,
                         key = { _, item -> item.unique_num }) { index, club ->
-                        ClubItem(selectedIndex, index, {}) { JoinedClubContent(club = club) }
+                        ClubItem(selectedIndex, index, {}) {
+                            JoinedClubContent(
+                                club = club,
+                                onNavigateToClubPage,
+                                saveUniqueNum
+                            )
+                        }
                     }
                 }
             )
@@ -112,6 +123,8 @@ fun JoinClubScreenPreview() {
         onNavigateToMakeClub = {},
         onNavigateToClubSearch = {},
         getJoinedClub = {},
-        joinedTeamList = remember { mutableStateOf(dummyData) }
+        joinedTeamList = remember { mutableStateOf(dummyData) },
+        onNavigateToClubPage = {},
+        saveUniqueNum = {},
     )
 }
