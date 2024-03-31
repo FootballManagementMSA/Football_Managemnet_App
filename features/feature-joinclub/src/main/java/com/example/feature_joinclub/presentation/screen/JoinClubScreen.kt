@@ -38,6 +38,12 @@ fun JoinClubScreen(
     joinedTeamList: State<List<UserTeamInfoModel>>,
     onNavigateToClubPage: () -> Unit,
     saveUniqueNum: (String) -> Unit,
+    saveRole: (String) -> Unit,
+    saveIntroduce: (String) -> Unit,
+    saveTeamName: (String) -> Unit,
+    saveTeamEmblem: (String) -> Unit,
+    saveCreatedAt: (String) -> Unit,
+    saveSizeOfUsers: (Int) -> Unit,
 ) {
     val showSheet = remember {
         mutableStateOf(true)
@@ -71,7 +77,13 @@ fun JoinClubScreen(
                             JoinedClubContent(
                                 club = club,
                                 onNavigateToClubPage,
-                                saveUniqueNum
+                                saveUniqueNum,
+                                saveRole,
+                                saveIntroduce,
+                                saveTeamName,
+                                saveTeamEmblem,
+                                saveCreatedAt,
+                                saveSizeOfUsers
                             )
                         }
                     }
@@ -126,5 +138,11 @@ fun JoinClubScreenPreview() {
         joinedTeamList = remember { mutableStateOf(dummyData) },
         onNavigateToClubPage = {},
         saveUniqueNum = {},
+        saveSizeOfUsers = {},
+        saveCreatedAt = {},
+        saveTeamEmblem = {},
+        saveTeamName = {},
+        saveIntroduce = {},
+        saveRole = {}
     )
 }

@@ -47,6 +47,42 @@ internal class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveSelectedTeamRole(role: String) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_ROLE]
+        }
+    }
+
+    override suspend fun saveSelectedTeamIntroduce(introduce: String) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_INTRODUCE]
+        }
+    }
+
+    override suspend fun saveSelectedTeamName(teamName: String) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_NAME]
+        }
+    }
+
+    override suspend fun saveSelectedTeamEmblem(teamEmblem: String) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_EMBLEM]
+        }
+    }
+
+    override suspend fun saveSelectedTeamCreatedAt(createdAt: String) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_CREATED_AT]
+        }
+    }
+
+    override suspend fun saveSelectedTeamSizeOfUsers(sizeOfUsers: Int) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_SIZE_OF_USERS]
+        }
+    }
+
     override suspend fun login() {
     }
     override suspend fun join(){
@@ -70,5 +106,29 @@ internal class UserLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getSelectedTeamUniqueNumber(): String {
         return dataStore.data.first()[PreferenceKeys.UNIQUE_NUMBER] ?: ""
+    }
+
+    override suspend fun getSelectedTeamRole(): String {
+        return dataStore.data.first()[PreferenceKeys.TEAM_ROLE] ?: ""
+    }
+
+    override suspend fun getSelectedTeamIntroduce(): String {
+        return dataStore.data.first()[PreferenceKeys.TEAM_INTRODUCE] ?: ""
+    }
+
+    override suspend fun getSelectedTeamName(): String {
+        return dataStore.data.first()[PreferenceKeys.TEAM_NAME] ?: ""
+    }
+
+    override suspend fun getSelectedTeamEmblem(): String {
+        return dataStore.data.first()[PreferenceKeys.TEAM_EMBLEM] ?: ""
+    }
+
+    override suspend fun getSelectedTeamCreatedAt(): String {
+        return dataStore.data.first()[PreferenceKeys.TEAM_CREATED_AT] ?: ""
+    }
+
+    override suspend fun getSelectedTeamSizeOfUsers(): Int {
+        return dataStore.data.first()[PreferenceKeys.TEAM_SIZE_OF_USERS] ?: 0
     }
 }

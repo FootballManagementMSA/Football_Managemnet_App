@@ -182,6 +182,24 @@ fun FootBallManagerAppNavigator(
                 },
                 saveUniqueNum = {
                     clubSearchViewModel.saveSelectedTeamUniqueNum(it)
+                },
+                saveRole = {
+                    clubSearchViewModel.saveSelectedTeamRole(it)
+                },
+                saveIntroduce = {
+                    clubSearchViewModel.saveSelectedTeamIntroduce(it)
+                },
+                saveTeamName = {
+                    clubSearchViewModel.saveSelectedTeamName(it)
+                },
+                saveTeamEmblem = {
+                    clubSearchViewModel.saveSelectedTeamEmblem(it)
+                },
+                saveCreatedAt = {
+                    clubSearchViewModel.saveSelectedTeamCreatedAt(it)
+                },
+                saveSizeOfUsers = {
+                    clubSearchViewModel.saveSelectedTeamSizeOfUsers(it)
                 }
             )
         }
