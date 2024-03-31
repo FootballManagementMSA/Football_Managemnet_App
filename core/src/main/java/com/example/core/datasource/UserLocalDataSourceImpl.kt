@@ -49,37 +49,37 @@ internal class UserLocalDataSourceImpl @Inject constructor(
 
     override suspend fun saveSelectedTeamRole(role: String) {
         dataStore.edit {
-            it[PreferenceKeys.TEAM_ROLE]
+            it[PreferenceKeys.TEAM_ROLE] = role
         }
     }
 
     override suspend fun saveSelectedTeamIntroduce(introduce: String) {
         dataStore.edit {
-            it[PreferenceKeys.TEAM_INTRODUCE]
+            it[PreferenceKeys.TEAM_INTRODUCE] = introduce
         }
     }
 
     override suspend fun saveSelectedTeamName(teamName: String) {
         dataStore.edit {
-            it[PreferenceKeys.TEAM_NAME]
+            it[PreferenceKeys.TEAM_NAME] = teamName
         }
     }
 
     override suspend fun saveSelectedTeamEmblem(teamEmblem: String) {
         dataStore.edit {
-            it[PreferenceKeys.TEAM_EMBLEM]
+            it[PreferenceKeys.TEAM_EMBLEM] = teamEmblem
         }
     }
 
     override suspend fun saveSelectedTeamCreatedAt(createdAt: String) {
         dataStore.edit {
-            it[PreferenceKeys.TEAM_CREATED_AT]
+            it[PreferenceKeys.TEAM_CREATED_AT] = createdAt
         }
     }
 
     override suspend fun saveSelectedTeamSizeOfUsers(sizeOfUsers: Int) {
         dataStore.edit {
-            it[PreferenceKeys.TEAM_SIZE_OF_USERS]
+            it[PreferenceKeys.TEAM_SIZE_OF_USERS] = sizeOfUsers
         }
     }
 
