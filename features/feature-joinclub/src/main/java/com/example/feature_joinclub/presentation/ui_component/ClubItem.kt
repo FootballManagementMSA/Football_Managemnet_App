@@ -132,6 +132,12 @@ fun JoinedClubContent(
     club: UserTeamInfoModel,
     onNavigateToClubPage: () -> Unit,
     saveUniqueNum: (String) -> Unit,
+    saveRole: (String) -> Unit,
+    saveIntroduce: (String) -> Unit,
+    saveTeamName: (String) -> Unit,
+    saveTeamEmblem: (String) -> Unit,
+    saveCreatedAt: (String) -> Unit,
+    saveSizeOfUsers: (Int) -> Unit
 ) {
     Row(
         Modifier
@@ -139,6 +145,12 @@ fun JoinedClubContent(
             .fillMaxSize()
             .clickable {
                 saveUniqueNum(club.unique_num)
+                saveRole(club.role)
+                saveIntroduce(club.introduce)
+                saveTeamName(club.teamName)
+                saveTeamEmblem(club.teamEmblem)
+                saveCreatedAt(club.createdAt)
+                saveSizeOfUsers(club.sizeOfUsers)
                 onNavigateToClubPage()
             },
         horizontalArrangement = Arrangement.SpaceBetween
@@ -183,7 +195,7 @@ fun JoinedClubContent(
 @Preview
 fun ClubItemPreview() {
     val selectedIndex =
-        remember { mutableStateOf(1) } // Remember to initialize selectedIndex using remember
+        remember { mutableStateOf(1) }
 
     ClubItem(selectedIndex = selectedIndex, index = 1, {}) {
         ClubContent(club = ClubInfo(3, "teamname", 20, "unique", "", ""))

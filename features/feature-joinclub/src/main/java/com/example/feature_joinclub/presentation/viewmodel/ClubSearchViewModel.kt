@@ -9,6 +9,14 @@ import com.example.core.model.UserTeamInfoModel
 import com.example.coroutine.IoDispatcher
 import com.example.feature_joinclub.domain.usecase.ClubJoinRequestUseCase
 import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
+import com.example.feature_joinclub.domain.usecase.GetSelectedTeamCreatedAtUseCase
+import com.example.feature_joinclub.domain.usecase.GetSelectedTeamSizeOfUsersUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamCreatedAtUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamEmblemUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamIntroduceUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamNameUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamRoleUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamSizeOfUsersUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamUniqueNumUseCase
 import com.example.feature_joinclub.domain.usecase.SearchClubUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +35,14 @@ class ClubSearchViewModel @Inject constructor(
     private val clubJoinRequestUseCase: ClubJoinRequestUseCase,
     private val getJoinedClubUseCase: GetJoinedClubUseCase,
     private val saveSelectedTeamUniqueNumUseCase: SaveSelectedTeamUniqueNumUseCase,
+    private val saveSelectedTeamRoleUseCase: SaveSelectedTeamRoleUseCase,
+    private val saveSelectedTeamIntroduceUseCase: SaveSelectedTeamIntroduceUseCase,
+    private val saveSelectedTeamNameUseCase: SaveSelectedTeamNameUseCase,
+    private val saveSelectedTeamEmblemUseCase: SaveSelectedTeamEmblemUseCase,
+    private val saveSelectedTeamCreatedAtUseCase: SaveSelectedTeamCreatedAtUseCase,
+    private val saveSelectedTeamSizeOfUsersUseCase: SaveSelectedTeamSizeOfUsersUseCase,
+    private val getSelectedTeamSizeOfUsersUseCase: GetSelectedTeamSizeOfUsersUseCase,
+    private val getSelectedTeamCreatedAtUseCase: GetSelectedTeamCreatedAtUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ViewModel(){
     private val _searchValue = MutableStateFlow("")
@@ -68,8 +84,6 @@ class ClubSearchViewModel @Inject constructor(
             )
             _JoinResult.emit(result)
         }
-
-
     }
 
     fun getJoinedClubList() {
@@ -81,6 +95,42 @@ class ClubSearchViewModel @Inject constructor(
     fun saveSelectedTeamUniqueNum(uniqueNum: String) {
         viewModelScope.launch {
             saveSelectedTeamUniqueNumUseCase(uniqueNum)
+        }
+    }
+
+    fun saveSelectedTeamRole(role: String) {
+        viewModelScope.launch {
+            saveSelectedTeamRoleUseCase(role)
+        }
+    }
+
+    fun saveSelectedTeamIntroduce(introduce: String) {
+        viewModelScope.launch {
+            saveSelectedTeamIntroduceUseCase(introduce)
+        }
+    }
+
+    fun saveSelectedTeamName(name: String) {
+        viewModelScope.launch {
+            saveSelectedTeamNameUseCase(name)
+        }
+    }
+
+    fun saveSelectedTeamEmblem(emblem: String) {
+        viewModelScope.launch {
+            saveSelectedTeamEmblemUseCase(emblem)
+        }
+    }
+
+    fun saveSelectedTeamCreatedAt(createdAt: String) {
+        viewModelScope.launch {
+            saveSelectedTeamCreatedAtUseCase(createdAt)
+        }
+    }
+
+    fun saveSelectedTeamSizeOfUsers(sizeOfUsers: Int) {
+        viewModelScope.launch {
+            saveSelectedTeamSizeOfUsersUseCase(sizeOfUsers)
         }
     }
 }
