@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +42,7 @@ import com.example.ui_component.template.DefaultItem
 import com.example.ui_component.values.horizontalGradation
 import com.example.ui_component.values.tinyFont
 import com.example.ui_component.values.veryBigFont
+import kotlinx.coroutines.launch
 
 @Composable
 fun ClubItem(
@@ -139,19 +141,22 @@ fun JoinedClubContent(
     saveCreatedAt: (String) -> Unit,
     saveSizeOfUsers: (Int) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Row(
         Modifier
             .padding(20.dp)
             .fillMaxSize()
             .clickable {
-                saveUniqueNum(club.unique_num)
-                saveRole(club.role)
-                saveIntroduce(club.introduce)
-                saveTeamName(club.teamName)
-                saveTeamEmblem(club.teamEmblem)
-                saveCreatedAt(club.createdAt)
-                saveSizeOfUsers(club.sizeOfUsers)
-                onNavigateToClubPage()
+                coroutineScope.launch {
+                    saveUniqueNum(club.unique_num)
+                    saveRole(club.role)
+                    saveIntroduce(club.introduce)
+                    saveTeamName(club.teamName)
+                    saveTeamEmblem(club.teamEmblem)
+                    saveCreatedAt(club.createdAt)
+                    saveSizeOfUsers(club.sizeOfUsers)
+                    onNavigateToClubPage()
+                }
             },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
