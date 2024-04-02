@@ -6,7 +6,9 @@ import com.example.core.mapper.UiModelMapper.mapToUiModel
 import com.example.core.model.ClubInfo
 import com.example.core.model.ClubSchedule
 import com.example.core.model.ClubSchedule.Companion.mapToEntity
+import com.example.core.model.LocationInfo
 import com.example.core.model.MakeClubModel
+import com.example.core.model.Map
 import com.example.core.model.UserTeamInfoModel
 import com.example.core.util.FormDataUtil
 import com.example.network_api.repository.ClubRepository
@@ -40,6 +42,12 @@ class ClubDataSourceImpl @Inject constructor(
         return clubRepository.searchClub(code).mapToUiModel().data
     }
 
+
+    override suspend fun searchMap(code: String): List<LocationInfo> {
+        return clubRepository.searchMap(code).mapToUiModel().items
+    }
+
+
     override suspend fun createClubSchedule(
         teamId: Long,
         clubSchedule: ClubSchedule
@@ -60,4 +68,8 @@ class ClubDataSourceImpl @Inject constructor(
         val userId = userLocalDataSource.getUserId()
         return clubRepository.getJoinedClub(userId).mapToUiModel().data
     }
+
+
+
+
 }
