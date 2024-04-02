@@ -1,5 +1,4 @@
 package com.example.auto_complete
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -36,42 +35,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.core.model.ClubInfo
+import com.example.core.model.LocationInfo
 import com.example.core.model.Map
+import java.nio.file.LinkOption
 
 @Composable
-fun AutoCompleteSearchBox(
+fun AutoCompleteSearchBox_Custom(
     modifier: Modifier = Modifier,
     placeholder: String,
     viewModel: AutoCompleteViewModel = hiltViewModel(),
-    onSelect: (ClubInfo) -> Unit = {},
-    content: @Composable (ClubInfo) -> Unit
+    onSelect: (LocationInfo) -> Unit = {},
+    content: @Composable (LocationInfo) -> Unit
 ) {
-    val expanded = viewModel.expanded.collectAsState()
-    val searchValue = viewModel.searchValue.collectAsState()
-    val items = viewModel.items.collectAsState()
+    val expanded = viewModel.expandedMap.collectAsState()
+    val searchValue = viewModel.searchMapValue.collectAsState()
+    val items = viewModel.itemsMap.collectAsState()
     Column(
         modifier = modifier
-            .padding(30.dp)
+            .padding(10.dp)
             .fillMaxWidth()
             .testTag("AutoComplete")
     ) {
-        AutoCompleteTextField(
+        AutoCompleteTextField_Custom(
             searchValue = searchValue,
-            expanded = { viewModel.updateExpandedValue(!expanded.value) },
+            expanded = { viewModel.updateExpandedMapValue(!expanded.value) },
             placeholder = placeholder,
-            onIconClick = { viewModel.fetchItems(searchValue.value)}
+            onIconClick = { viewModel.fetchMapItems(searchValue.value)}
         ) {
-            viewModel.updateSearchValue(it)
+            viewModel.updateSearchMapValue(it)
         }
 
-        SearchDropdown(
+        SearchDropdown_Custom(
             expanded = expanded,
             items = items.value,
             onSearchValueSelect = {
                 onSelect(it)
-                viewModel.updateSearchValue(it.teamName.toString())
-                viewModel.updateExpandedValue(false)
+                viewModel.updateSearchMapValue(it.address)
+                viewModel.updateExpandedMapValue(false)
             },
         ) {
             content(it)
@@ -80,7 +80,7 @@ fun AutoCompleteSearchBox(
 }
 
 @Composable
-fun AutoCompleteTextField(
+fun AutoCompleteTextField_Custom(
     searchValue: State<String>,
     expanded: () -> Unit,
     placeholder: String,
@@ -138,11 +138,11 @@ fun AutoCompleteTextField(
 }
 
 @Composable
-fun SearchDropdown(
+fun SearchDropdown_Custom(
     expanded: State<Boolean>,
-    items: List<ClubInfo>,
-    onSearchValueSelect: (ClubInfo) -> Unit,
-    content: @Composable (ClubInfo) -> Unit
+    items: List<LocationInfo>,
+    onSearchValueSelect: (LocationInfo) -> Unit,
+    content: @Composable (LocationInfo) -> Unit
 ) {
     AnimatedVisibility(visible = expanded.value) {
         Card(
@@ -158,7 +158,7 @@ fun SearchDropdown(
                     .testTag("SearchDropdown"),
             ) {
                 items(items) {
-                    SearchItems(item = it, onSearchValueSelect = onSearchValueSelect) {
+                    SearchItems_Custom(item = it, onSearchValueSelect = onSearchValueSelect) {
                         content(it)
                     }
                 }
@@ -168,7 +168,7 @@ fun SearchDropdown(
 }
 
 @Composable
-fun SearchItems(item: ClubInfo, onSearchValueSelect: (ClubInfo) -> Unit, content: @Composable () -> Unit) {
+fun SearchItems_Custom(item: LocationInfo, onSearchValueSelect: (LocationInfo) -> Unit, content: @Composable () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,6 +184,6 @@ fun SearchItems(item: ClubInfo, onSearchValueSelect: (ClubInfo) -> Unit, content
 
 @Preview(showBackground = true)
 @Composable
-fun AutoCompletePreview() {
+fun AutoCompletePreview1() {
 
 }
