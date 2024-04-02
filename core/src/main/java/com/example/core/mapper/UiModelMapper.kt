@@ -1,15 +1,18 @@
 package com.example.core.mapper
 
 import android.util.Log
+import com.example.core.mapper.UiModelMapper.mapToUiModel
 import com.example.core.model.Club
 import com.example.core.model.ClubInfo
 import com.example.core.model.JoinedClub
 import com.example.core.model.JoinedClubData
 import com.example.core.model.JoinedClubInfo
 import com.example.core.model.LocalScreen
+import com.example.core.model.LocationInfo
 import com.example.core.model.MainHomeScheduleUiModel
 import com.example.core.model.MainHomeStudentDataUiModel
 import com.example.core.model.MainSchedule
+import com.example.core.model.Map
 import com.example.core.model.MemberUiModel
 import com.example.core.model.MyPageUserInfoUiModel
 import com.example.core.model.Position
@@ -24,9 +27,11 @@ import com.example.network_api.response.ClubInfoResponse
 import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.JoinedClubDataResponse
 import com.example.network_api.response.JoinedClubInfoResponse
+import com.example.network_api.response.LocationInfoResponse
 import com.example.network_api.response.MainHomeScheduleResponse
 import com.example.network_api.response.MainHomeStudentDataResponse
 import com.example.network_api.response.MainScheduleResponse
+import com.example.network_api.response.MapResponse
 import com.example.network_api.response.RespResult
 import com.example.network_api.response.SearchClubResponse
 import com.example.network_api.response.Student
@@ -119,6 +124,7 @@ object UiModelMapper {
         }
     }
 
+
     fun RespResult<SearchClubResponse>.mapToUiModel(): Club {
         return when (this) {
             is RespResult.Success -> {
@@ -148,6 +154,47 @@ object UiModelMapper {
         }
     }
 
+    fun RespResult<MapResponse>.mapToUiModel(): Map {
+        return when (this) {
+            is RespResult.Success -> {
+                Map(
+                    lastBuildDate = data.lastBuildDate,
+                    total = data.total,
+                    start = data.start,
+                    display = data.display,
+                    items = data.items.map{it.mapToUiModel()}
+
+                )
+            }
+
+            is RespResult.Error -> {
+                Map(
+                    lastBuildDate = "0",
+                    total = 0,
+                    start = 0,
+                    display = 0,
+                    items = listOf(
+                        LocationInfo(
+                            address = "1",
+                            title = "1",
+                            link = "1",
+                            category = "1",
+                            description = "1",
+                            telephone = "1",
+                            roadAddress = "1",
+                            mapx = "1",
+                            mapy = "1"
+                        )
+                    )
+                )
+
+
+            }
+
+        }
+    }
+
+
     fun ClubInfoResponse.mapToUiModel() = ClubInfo(
         teamId = this.teamId,
         teamName = this.teamName,
@@ -155,6 +202,18 @@ object UiModelMapper {
         details = this.details,
         uniqueNum = this.uniqueNum,
         emblem = this.emblem
+    )
+
+    fun LocationInfoResponse.mapToUiModel() = LocationInfo(
+        title = this.title,
+        link = this.link,
+        category = this.category,
+        description = this.description,
+        telephone = this.telephone,
+        address = this.address,
+        roadAddress = this.roadAddress,
+        mapx = this.mapx,
+        mapy = this.mapy
     )
 
     fun MainScheduleResponse.mapToUiModel() = MainSchedule(
@@ -221,7 +280,7 @@ object UiModelMapper {
     fun RespResult<JoinedClubResponse>.mapToUiModel(): JoinedClub {
         return when (this) {
             is RespResult.Success -> {
-                Log.e("test",data.data.toString())
+                Log.e("test", data.data.toString())
                 JoinedClub(
                     status = data.status,
                     message = data.message,
@@ -242,12 +301,12 @@ object UiModelMapper {
     }
 
     fun UserTeamInfo.mapToUiModel() = UserTeamInfoModel(
-        role= this.role,
-        introduce= this.introduce,
-        teamName= this.teamName,
-        unique_num= this.unique_num,
-        teamEmblem= this.teamEmblem,
-        createdAt= this.createdAt,
-        sizeOfUsers= this.sizeOfUsers
+        role = this.role,
+        introduce = this.introduce,
+        teamName = this.teamName,
+        unique_num = this.unique_num,
+        teamEmblem = this.teamEmblem,
+        createdAt = this.createdAt,
+        sizeOfUsers = this.sizeOfUsers
     )
 }
