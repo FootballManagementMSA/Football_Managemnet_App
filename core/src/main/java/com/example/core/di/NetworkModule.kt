@@ -3,10 +3,12 @@ package com.example.core.di
 import android.content.Context
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.core.util.BASE_URL
+import com.example.core.util.NAVER_URL
 import com.example.core.util.userDataStore
 import com.example.network_api.api.ClubApi
 import com.example.network_api.api.FootballManagerApi
 import com.example.network_api.api.MainHomeApi
+import com.example.network_api.api.NaverApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +22,7 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
@@ -62,6 +65,23 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    @Provides
+    @Singleton
+    @Named(NAVER_URL)
+    fun provideRetrofitForBaseUrl2(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(NAVER_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    @Provides
+    @Singleton
+    fun provideNaverApi(@Named(NAVER_URL) retrofit: Retrofit): NaverApi {
+        return retrofit.create(NaverApi::class.java)
+    }
+
     @Provides
     @Singleton
     fun provideFootballManagerApi(retrofit: Retrofit): FootballManagerApi {

@@ -1,5 +1,6 @@
 package com.example.feature_schedule.presentation.view
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -22,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,14 +36,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.auto_complete.AutoCompleteSearchBox
+import com.example.auto_complete.AutoCompleteSearchBox_Custom
 import com.example.calendar.Calendar
 import com.example.core.model.ClubInfo
 import com.example.core.model.ClubSchedule
+import com.example.core.model.LocationInfo
+import com.example.core.model.Map
 import com.example.ui_component.HorizontalSpacer
 import com.example.ui_component.R
 import com.example.ui_component.buttons.CustomGradientButton
@@ -54,6 +60,8 @@ import com.example.ui_component.values.middleFont
 import com.example.ui_component.values.tinyFont
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -68,8 +76,13 @@ fun MakeScheduleScreen(
     val location = remember { mutableStateOf("") }
     val showCalendar = remember { mutableStateOf(false) }
     val showAutoComplete = remember { mutableStateOf(false) }
+    val showAutoCompleteCustom = remember { mutableStateOf(false) }
+
     val setStart = remember { mutableStateOf(false) }
     val selectedClub = remember { mutableStateOf<ClubInfo?>(null) }
+
+    val selectedMap = remember { mutableStateOf<LocationInfo?>(null) }
+
     if (showCalendar.value) {
         CalendarSheet(showCalendar, setStart, startDate, endDate)
     }
@@ -79,6 +92,18 @@ fun MakeScheduleScreen(
             showAutoComplete.value = false
         }
     }
+
+    if (showAutoCompleteCustom.value) {
+        AutoCompleteSheet1(
+            showAutoComplete = showAutoCompleteCustom,
+            onSelect = { selectedLocation ->
+                selectedMap.value = selectedLocation
+                showAutoCompleteCustom.value = false
+            },
+            location = location
+        )
+    }
+
     Column(
         Modifier
             .background(mainTheme)
@@ -92,7 +117,7 @@ fun MakeScheduleScreen(
         Spacer(modifier = Modifier.weight(0.4f))
         ScheduleDateView(startDate, showCalendar, setStart, endDate)
         Spacer(modifier = Modifier.weight(0.4f))
-        ScheduleLocationView(location)
+        ScheduleLocationView(location, showAutoCompleteCustom)
         Spacer(modifier = Modifier.weight(0.4f))
         Text("상대팀 설정", color = Color.Gray)
         SetTeamView(myUri, showAutoComplete, selectedClub)
@@ -150,35 +175,130 @@ private fun SetTeamView(
             color = Color.Gray,
             fontSize = middleFont
         )
-        AsyncImage(modifier = Modifier
-            .clip(CircleShape)
-            .background(emblem)
-            .size(40.dp)
-            .padding(top = 5.dp)
-            .clickable {
-                showAutoComplete.value = true
-            }, model = selectedClubInfo.value?.emblem, contentDescription = ""
+        AsyncImage(
+            modifier = Modifier
+                .clip(CircleShape)
+                .background(emblem)
+                .size(40.dp)
+                .padding(top = 5.dp)
+                .clickable {
+                    showAutoComplete.value = true
+                }, model = selectedClubInfo.value?.emblem, contentDescription = ""
         )
     }
 }
 
 @Composable
-private fun ScheduleLocationView(location: MutableState<String>) {
+private fun ScheduleLocationView(
+    location: MutableState<String>,
+    showAutoComplete: MutableState<Boolean>,
+) {
     Text("일정 장소", color = Color.Gray)
+
     InputView(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                showAutoComplete.value = true
+
+            },
+
         text = { location.value },
         onChange = { location.value = it }, placeholder = "일정 장소를 입력해주세요.",
         leadingIcon = {
             Icon(
-                modifier = Modifier,
+                modifier = Modifier.clickable { showAutoComplete.value = true },
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = ""
             )
         }
     )
 }
+
+@Composable
+private fun AutoCompleteSheet(
+    showAutoComplete: MutableState<Boolean>,
+    onSelect: (ClubInfo) -> Unit,
+
+    ) {
+    DefaultBottomSheet(
+        modifier = Modifier.fillMaxHeight(0.6f),
+        onDismiss = { showAutoComplete.value = false }) {
+        AutoCompleteSearchBox(
+            placeholder = "상대 구단을 검색해주세요.",
+            onSelect = onSelect
+        ) {
+            Text(text = it.teamName.toString())
+            HorizontalSpacer(value = 5)
+            Text(fontSize = 10.sp, text = "구단 고유 코드 : ${it.uniqueNum}")
+        }
+    }
+}
+
+@Composable
+fun ClickableNavItem(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(4.dp)
+    ) {
+        Text(
+            text = "네이버 지도에서 찾아보기",
+            color = Color.Blue,
+            fontSize = tinyFont,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .padding(horizontal = 2.dp)
+                .align(Alignment.CenterStart)
+                .padding(start = 20.dp)
+
+        )
+    }
+}
+
+@Composable
+private fun AutoCompleteSheet1(
+    showAutoComplete: MutableState<Boolean>,
+    onSelect: (LocationInfo) -> Unit,
+    location: MutableState<String> // 추가된 부분
+) {
+    val context = LocalContext.current
+
+    DefaultBottomSheet(
+        modifier = Modifier.fillMaxHeight(0.6f),
+        onDismiss = { showAutoComplete.value = false }
+    ) {
+        Column {
+
+
+            AutoCompleteSearchBox_Custom(
+                placeholder = "일정의 위치를 검색해주세요.",
+                onSelect = {
+                    onSelect(it)
+                    // 선택한 위치를 ScheduleLocationView로 전달
+                    location.value = it.address
+                    showAutoComplete.value = false // 자동 완성 창 닫기
+                }
+            ) {
+                Text(text = it.title)
+                HorizontalSpacer(value = 5)
+                Text(fontSize = 10.sp, text = it.address)
+            }
+
+            ClickableNavItem(
+                onClick = {
+                val naverMapUri = Uri.parse("https://map.naver.com/")
+                val intent = Intent(Intent.ACTION_VIEW, naverMapUri)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
+            }
+            )
+        }
+    }
+}
+
 
 @Composable
 private fun ScheduleDateView(
@@ -291,25 +411,6 @@ private fun CalendarSheet(
                 endDate.value = "${it.year}-${it.month}-${it.day}"
             }
             showCalendar.value = false
-        }
-    }
-}
-
-@Composable
-private fun AutoCompleteSheet(
-    showAutoComplete: MutableState<Boolean>,
-    onSelect: (ClubInfo) -> Unit
-) {
-    DefaultBottomSheet(
-        modifier = Modifier.fillMaxHeight(0.6f),
-        onDismiss = { showAutoComplete.value = false }) {
-        AutoCompleteSearchBox(
-            placeholder = "상대 구단을 검색해주세요.",
-            onSelect = onSelect
-        ) {
-            Text(text = it.teamName.toString())
-            HorizontalSpacer(value = 5)
-            Text(fontSize = 10.sp, text = "구단 고유 코드 : ${it.uniqueNum}")
         }
     }
 }

@@ -1,0 +1,13 @@
+plugins {
+    id 'com.android.library'
+}
+
+apply from: "../../base-compose-build.gradle"
+
+android {
+    namespace 'com.example.feature_map'
+}
+
+dependencies {
+    implementation project(':core')
+}
