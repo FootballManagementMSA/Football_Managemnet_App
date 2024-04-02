@@ -4,6 +4,7 @@ import com.example.network_api.ErrorType
 import com.example.network_api.RespMapper
 import com.example.network_api.api.ClubApi
 import com.example.network_api.api.FootballManagerApi
+import com.example.network_api.api.NaverApi
 import com.example.network_api.entity.ClubJoin
 import com.example.network_api.entity.Join
 import com.example.network_api.entity.Login
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 internal class UserRepositoryImpl @Inject constructor(
     private val footballManagerApi: FootballManagerApi,
-    private val clubApi: ClubApi
+    private val clubApi: ClubApi,
 ) : UserRepository {
     override suspend fun login(loginReq: Login): RespResult<LoginResponse> {
         val response = footballManagerApi.login(loginReq)
