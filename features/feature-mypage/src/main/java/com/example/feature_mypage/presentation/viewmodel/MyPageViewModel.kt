@@ -11,6 +11,7 @@ import com.example.core.model.ModifyUserInfoModel
 import com.example.feature_mypage.domain.usecase.ClearDataStoreUseCase
 import com.example.feature_mypage.domain.usecase.GetUserInfoUseCase
 import com.example.feature_mypage.domain.usecase.ModifyUserInfoUseCase
+import com.example.feature_mypage.domain.usecase.SignOutUseCase
 import com.example.feature_mypage.presentation.UserInfoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,8 @@ class MyPageViewModel @Inject constructor(
     private val contentResolver: ContentResolver,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val clearDataStoreUseCase: ClearDataStoreUseCase,
-    private val modifyUserInfoUseCase: ModifyUserInfoUseCase
+    private val modifyUserInfoUseCase: ModifyUserInfoUseCase,
+    private val signOutUseCase: SignOutUseCase
 ): ViewModel() {
     private  val _selectedImageUri = MutableStateFlow<Uri?>(null)
     val selectedImageUri: StateFlow<Uri?> = _selectedImageUri
@@ -71,6 +73,12 @@ class MyPageViewModel @Inject constructor(
                     _modifyUserInfoResult.emit(result)
                 }
             }
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch(ioDispatcher) {
+            signOutUseCase()
         }
     }
 }

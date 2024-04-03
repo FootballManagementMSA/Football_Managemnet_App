@@ -142,7 +142,7 @@ fun MyPageScreen(
                                 onNavigateToLogin()
                             },
                             onClearDataStore = { viewModel.clearDataStore() },
-                            onSignOut = {}) {
+                            onSignOut = { viewModel.signOut() }) {
                             isSignOutDialogOpen.value = false
                         }
                     }
