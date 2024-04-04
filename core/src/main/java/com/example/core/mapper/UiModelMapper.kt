@@ -1,7 +1,6 @@
 package com.example.core.mapper
 
 import android.util.Log
-import com.example.core.mapper.UiModelMapper.mapToUiModel
 import com.example.core.model.Club
 import com.example.core.model.ClubInfo
 import com.example.core.model.JoinedClub
@@ -17,6 +16,7 @@ import com.example.core.model.MemberUiModel
 import com.example.core.model.MyPageUserInfoUiModel
 import com.example.core.model.Position
 import com.example.core.model.PositionPresetUIModel
+import com.example.core.model.SignOut
 import com.example.core.model.StudentUiModel
 import com.example.core.model.Team
 import com.example.core.model.UserTeamInfoModel
@@ -24,9 +24,9 @@ import com.example.network_api.entity.Member
 import com.example.network_api.entity.PositionPreset
 import com.example.network_api.entity.RemoteScreen
 import com.example.network_api.response.ClubInfoResponse
-import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.JoinedClubDataResponse
 import com.example.network_api.response.JoinedClubInfoResponse
+import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.LocationInfoResponse
 import com.example.network_api.response.MainHomeScheduleResponse
 import com.example.network_api.response.MainHomeStudentDataResponse
@@ -34,6 +34,7 @@ import com.example.network_api.response.MainScheduleResponse
 import com.example.network_api.response.MapResponse
 import com.example.network_api.response.RespResult
 import com.example.network_api.response.SearchClubResponse
+import com.example.network_api.response.SignOutResponse
 import com.example.network_api.response.Student
 import com.example.network_api.response.TeamResponse
 import com.example.network_api.response.UserInfoResponse
@@ -309,4 +310,22 @@ object UiModelMapper {
         createdAt = this.createdAt,
         sizeOfUsers = this.sizeOfUsers
     )
+
+    fun RespResult<SignOutResponse>.mapToUiModel(): SignOut {
+        return when (this) {
+            is RespResult.Success -> {
+                SignOut(
+                    status = data.status,
+                    message = data.message
+                )
+            }
+
+            is RespResult.Error -> {
+                SignOut(
+                    status = this.error.code.toString() ?: "",
+                    message = this.error.errorMessage
+                )
+            }
+        }
+    }
 }

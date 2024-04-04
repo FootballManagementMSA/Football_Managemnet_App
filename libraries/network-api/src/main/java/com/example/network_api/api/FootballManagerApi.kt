@@ -5,11 +5,13 @@ import com.example.network_api.entity.Login
 import com.example.network_api.response.JoinResponse
 import com.example.network_api.response.LoginResponse
 import com.example.network_api.response.ModifyUserInfoResponse
+import com.example.network_api.response.SignOutResponse
 import com.example.network_api.response.UserInfoResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -42,4 +44,7 @@ interface FootballManagerApi {
         @Part("foot") foot: RequestBody,
         @Part image: MultipartBody.Part
     ): Response<ModifyUserInfoResponse>
+
+    @DELETE("/api/user-service/users")
+    suspend fun signOut(): Response<SignOutResponse>
 }

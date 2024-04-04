@@ -4,7 +4,6 @@ import com.example.network_api.ErrorType
 import com.example.network_api.RespMapper
 import com.example.network_api.api.ClubApi
 import com.example.network_api.api.FootballManagerApi
-import com.example.network_api.api.NaverApi
 import com.example.network_api.entity.ClubJoin
 import com.example.network_api.entity.Join
 import com.example.network_api.entity.Login
@@ -14,6 +13,7 @@ import com.example.network_api.response.JoinResponse
 import com.example.network_api.response.LoginResponse
 import com.example.network_api.response.ModifyUserInfoResponse
 import com.example.network_api.response.RespResult
+import com.example.network_api.response.SignOutResponse
 import com.example.network_api.response.UserInfoResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -74,6 +74,17 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun signOut(): RespResult<SignOutResponse> {
+        val response = footballManagerApi.signOut()
+        return if (response.isSuccessful) {
+            RespResult.Success(response.body()!!)
+        } else {
+            val errorBodyJson = response.errorBody()?.string() ?: ""
+            val errorBody = RespMapper.errorMapper(errorBodyJson)
+            RespResult.Error(ErrorType(errorBody.message!!, errorBody.code))
+        }
+    }
+
     override suspend fun join(joinReq: Join): RespResult<JoinResponse> {
         val response = footballManagerApi.Join(joinReq)
 
@@ -83,7 +94,8 @@ internal class UserRepositoryImpl @Inject constructor(
             val errorBodyJson = response.errorBody()?.string() ?: ""
             val errorBody = RespMapper.errorMapper(errorBodyJson)
             RespResult.Error(ErrorType(errorBody.message!!, errorBody.code))
-        }    }
+        }
+    }
 
     override suspend fun clubJoinRequest(clubJoinReq: ClubJoin): RespResult<ClubJoinResponse> {
         val response = clubApi.clubJoin(clubJoinReq)
@@ -94,5 +106,6 @@ internal class UserRepositoryImpl @Inject constructor(
             val errorBodyJson = response.errorBody()?.string() ?: ""
             val errorBody = RespMapper.errorMapper(errorBodyJson)
             RespResult.Error(ErrorType(errorBody.message!!, errorBody.code))
-        }      }
+        }
+    }
 }

@@ -31,7 +31,12 @@ import com.example.ui_component.values.largeIcon
 import com.example.ui_component.values.subTheme
 
 @Composable
-fun MyPageCardView(modifier: Modifier = Modifier, onClick: () -> Unit, onLogout: () -> Unit) {
+fun MyPageCardView(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    onLogout: () -> Unit,
+    onSignOut: () -> Unit
+) {
     Column(modifier = modifier) {
         MyPageCardItem(radius = 8.dp) {
             Image(
@@ -88,7 +93,7 @@ fun MyPageCardView(modifier: Modifier = Modifier, onClick: () -> Unit, onLogout:
 
         }
         VerticalSpacer(value = 20)
-        MyPageCardItem(radius = 8.dp) {
+        MyPageCardItem(modifier = Modifier.clickable { onSignOut() },radius = 8.dp) {
             Image(
                 painter = painterResource(id = R.drawable.check_icon),
                 contentDescription = null,
@@ -130,5 +135,5 @@ fun MyPageCardItem(
 @Preview
 @Composable
 fun MyPageCardViewPreview() {
-    MyPageCardView(onClick = {}) {}
+    MyPageCardView(onClick = {}, onLogout = {}) {}
 }

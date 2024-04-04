@@ -3,8 +3,8 @@ package com.example.core.datasource
 import android.util.Log
 import com.example.core.ResultState.BaseResult
 import com.example.core.ResultState.ClubJoinRequestResult
-import com.example.core.ResultState.LoginResult
 import com.example.core.ResultState.JoinResult
+import com.example.core.ResultState.LoginResult
 import com.example.core.mapper.EntityMapper.mapToEntity
 import com.example.core.mapper.UiModelMapper.mapToUiModel
 import com.example.core.model.ClubJoinRequestModel
@@ -12,6 +12,7 @@ import com.example.core.model.JoinModel
 import com.example.core.model.LoginModel
 import com.example.core.model.ModifyUserInfoModel
 import com.example.core.model.MyPageUserInfoUiModel
+import com.example.core.model.SignOut
 import com.example.core.model.UserInfo
 import com.example.core.util.FormDataUtil.mapToMultipart
 import com.example.core.util.FormDataUtil.mapToRequestBody
@@ -23,8 +24,6 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
     private val userRepository: UserRepository,
     private val userLocalDataSource: UserLocalDataSource
 ) : UserRemoteDataSource {
-
-
     override suspend fun join(joinModel: JoinModel): JoinResult {
         val result=userRepository.join(joinModel.mapToEntity())
         return when(result){
@@ -123,6 +122,10 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
                 BaseResult.Error(result.error.errorMessage)
             }
         }
+    }
+
+    override suspend fun signOut(): SignOut {
+        return userRepository.signOut().mapToUiModel()
     }
 
 
