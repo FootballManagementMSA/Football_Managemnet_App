@@ -11,8 +11,8 @@ data class StudentUiModel(
     val name: String,
     val game: Int,
     val goal: Int,
-    val position: String,
-    val foot: String,
+    var position: String,
+    var foot: String,
     val image: String,
     val age: Int
 )
