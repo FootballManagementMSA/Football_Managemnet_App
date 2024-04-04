@@ -14,6 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,38 +26,55 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.model.StudentUiModel
 import com.example.ui_component.R
 import com.example.ui_component.VerticalSpacer
 
 @Composable
-fun MyPageModifyInfoView(modifier: Modifier = Modifier) {
+fun MyPageModifyInfoView(modifier: Modifier = Modifier, studentData: MutableState<StudentUiModel>) {
     Column(
         modifier = modifier
             .padding(start = 40.dp, end = 40.dp, top = 10.dp)
     ) {
-        MyPageInfoBar(placeholder = "홍길동", infoText = "이름(닉네임)", isModifyEnable = false)
-        MyPageInfoBar(placeholder = "2001년", infoText = "나이 (출생년도)", isModifyEnable = false)
+        MyPageInfoBar(
+            placeholder = studentData.value.name,
+            infoText = "이름(닉네임)",
+            isModifyEnable = false
+        )
+        MyPageInfoBar(
+            placeholder = studentData.value.age.toString(),
+            infoText = "나이 (출생년도)",
+            isModifyEnable = false
+        )
         MyPageInfoBar(placeholder = "180cm", infoText = "키 (cm)", isModifyEnable = false)
         MyPageDropDownInfoBar(
             placeholder = "남성",
             infoText = "성별",
             isModifyEnable = true,
-            menuList = getArrayFromResource(arrayResId = R.array.sex)
+            menuList = getArrayFromResource(arrayResId = R.array.sex),
+            onFootValueSelected = {}
         )
-        MyPageDropDownInfoBar(
-            placeholder = "NF",
+        MyPagePositionDropDownInfoBar(
+            placeholder = studentData.value.position,
             infoText = "주포메이션",
             isModifyEnable = true,
-            menuList = getArrayFromResource(arrayResId = R.array.positions)
+            menuList = getArrayFromResource(arrayResId = R.array.positions),
+            onPositionValueSelected = { position ->
+                studentData.value.position = position
+            }
         )
         MyPageDropDownInfoBar(
-            placeholder = "왼발",
+            placeholder = studentData.value.foot,
             infoText = "주발",
             isModifyEnable = true,
-            menuList = getArrayFromResource(arrayResId = R.array.foot)
+            menuList = getArrayFromResource(arrayResId = R.array.foot),
+            onFootValueSelected = { selectedFoot ->
+                studentData.value.foot = selectedFoot
+            }
         )
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyPageInfoBar(
@@ -106,7 +124,8 @@ private fun MyPageDropDownInfoBar(
     placeholder: String,
     infoText: String,
     isModifyEnable: Boolean,
-    menuList: Array<String>
+    menuList: Array<String>,
+    onFootValueSelected: (String) -> Unit,
 ) {
     val text = remember {
         mutableStateOf("")
@@ -159,6 +178,79 @@ private fun MyPageDropDownInfoBar(
                         onClick = {
                             text.value = item
                             expanded = false
+                            onFootValueSelected(item)
+                        }
+                    )
+                }
+            }
+
+        }
+        VerticalSpacer(value = 25)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MyPagePositionDropDownInfoBar(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+    infoText: String,
+    isModifyEnable: Boolean,
+    menuList: Array<String>,
+    onPositionValueSelected: (String) -> Unit,
+) {
+    val text = remember {
+        mutableStateOf("")
+    }
+    val textColor = Color.Gray
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+    ) {
+        Text(text = infoText, style = TextStyle(color = Color.White))
+        VerticalSpacer(value = 7)
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            OutlinedTextField(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                enabled = isModifyEnable,
+                value = text.value,
+                onValueChange = { text.value = it },
+                singleLine = true,
+                readOnly = true,
+                placeholder = {
+                    Text(text = placeholder, color = textColor)
+                },
+                textStyle = TextStyle(color = textColor),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Gray,
+                    unfocusedBorderColor = Color.Gray,
+                    disabledBorderColor = Color.Gray,
+                ),
+                trailingIcon = {
+                    if (isModifyEnable) {
+                        DropDownIcon(expanded = expanded)
+                    }
+                }
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                menuList.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            text.value = item
+                            expanded = false
+                            onPositionValueSelected(item)
                         }
                     )
                 }
@@ -187,5 +279,5 @@ private fun getArrayFromResource(@ArrayRes arrayResId: Int): Array<String> {
 @Preview
 @Composable
 fun MyPageModifyInfoViewPreview() {
-    MyPageModifyInfoView()
+    MyPageModifyInfoView(studentData = mutableStateOf(StudentUiModel("", 0, 0, "", "", "", 0)))
 }

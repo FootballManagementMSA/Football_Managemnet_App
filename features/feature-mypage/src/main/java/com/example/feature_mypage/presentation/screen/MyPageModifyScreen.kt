@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.core.ResultState.BaseResult
+import com.example.core.model.StudentUiModel
 import com.example.feature_mypage.presentation.ui_component.ModifyProfileImageView
 import com.example.feature_mypage.presentation.ui_component.MyPageModifyInfoView
 import com.example.feature_mypage.presentation.viewmodel.MyPageViewModel
@@ -39,6 +41,7 @@ fun MyPageModifyScreen(
     val scrollState = rememberScrollState()
     val config = LocalConfiguration.current
     val context = LocalContext.current
+    val studentData = viewModel.studentData.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.modifyUserInfoResult.collect {
             when (it) {
@@ -93,7 +96,8 @@ fun MyPageModifyScreen(
                 modifier = Modifier
                     .requiredHeightIn(min = 650.dp)
                     .weight(8f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                studentData = studentData as MutableState<StudentUiModel>
             )
             Column(
                 modifier = Modifier

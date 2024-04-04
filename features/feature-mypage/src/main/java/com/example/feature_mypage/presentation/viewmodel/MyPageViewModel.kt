@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.ResultState.BaseResult
 import com.example.core.model.ModifyUserInfoModel
+import com.example.core.model.StudentUiModel
 import com.example.feature_mypage.domain.usecase.ClearDataStoreUseCase
 import com.example.feature_mypage.domain.usecase.GetUserInfoUseCase
+import com.example.feature_mypage.domain.usecase.LoadMyPageDataUseCase
 import com.example.feature_mypage.domain.usecase.ModifyUserInfoUseCase
 import com.example.feature_mypage.domain.usecase.SignOutUseCase
 import com.example.feature_mypage.presentation.UserInfoState
@@ -30,9 +32,10 @@ class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val clearDataStoreUseCase: ClearDataStoreUseCase,
     private val modifyUserInfoUseCase: ModifyUserInfoUseCase,
-    private val signOutUseCase: SignOutUseCase
-): ViewModel() {
-    private  val _selectedImageUri = MutableStateFlow<Uri?>(null)
+    private val signOutUseCase: SignOutUseCase,
+    private val loadMyPageDataUseCase: LoadMyPageDataUseCase
+) : ViewModel() {
+    private val _selectedImageUri = MutableStateFlow<Uri?>(null)
     val selectedImageUri: StateFlow<Uri?> = _selectedImageUri
 
     private val _uiState = MutableStateFlow<UserInfoState>(UserInfoState.Loading)
@@ -41,10 +44,16 @@ class MyPageViewModel @Inject constructor(
     private val _modifyUserInfoResult = MutableSharedFlow<BaseResult>(replay = 0)
     val modifyUserInfoResult: SharedFlow<BaseResult> = _modifyUserInfoResult.asSharedFlow()
 
+    private val _studentData =
+        MutableStateFlow<StudentUiModel>(StudentUiModel("", 0, 0, "", "", "", 0))
+    val studentData: StateFlow<StudentUiModel> = _studentData
+
     private val ioDispatcher = Dispatchers.IO
+
     init {
         loadUserInfo()
     }
+
     fun updateSelectedImageUri(uri: Uri?) {
         _selectedImageUri.value = uri
     }
@@ -52,6 +61,7 @@ class MyPageViewModel @Inject constructor(
     fun loadUserInfo() {
         viewModelScope.launch {
             _uiState.value = UserInfoState.Success(getUserInfoUseCase())
+            _studentData.value = loadMyPageDataUseCase()
         }
     }
 
@@ -60,16 +70,29 @@ class MyPageViewModel @Inject constructor(
             clearDataStoreUseCase()
         }
     }
+
     @SuppressLint("Recycle", "Range")
     fun modifyUserInfo() {
         viewModelScope.launch(ioDispatcher) {
             if (_selectedImageUri.value != null) {
-                val cursor = contentResolver.query(_selectedImageUri.value!!, null, null, null, null)
+                val cursor =
+                    contentResolver.query(_selectedImageUri.value!!, null, null, null, null)
                 cursor?.moveToNext()
-                val path = cursor?.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA))
+                val path =
+                    cursor?.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA))
                 val file = path?.let { File(it) }
                 file?.let {
-                    val result = modifyUserInfoUseCase(ModifyUserInfoModel("김찬휘",2001,190,"남성","ST","280", it))
+                    val result = modifyUserInfoUseCase(
+                        ModifyUserInfoModel(
+                            _studentData.value.name,
+                            _studentData.value.age,
+                            190,
+                            "남성",
+                            _studentData.value.position,
+                            _studentData.value.foot,
+                            it
+                        )
+                    )
                     _modifyUserInfoResult.emit(result)
                 }
             }
