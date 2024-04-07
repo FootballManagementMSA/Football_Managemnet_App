@@ -77,10 +77,8 @@ fun MakeScheduleScreen(
     val showCalendar = remember { mutableStateOf(false) }
     val showAutoComplete = remember { mutableStateOf(false) }
     val showAutoCompleteCustom = remember { mutableStateOf(false) }
-
     val setStart = remember { mutableStateOf(false) }
     val selectedClub = remember { mutableStateOf<ClubInfo?>(null) }
-
     val selectedMap = remember { mutableStateOf<LocationInfo?>(null) }
 
     if (showCalendar.value) {
@@ -135,10 +133,10 @@ fun MakeScheduleScreen(
                     memo = memo.value,
                     startTime = parseToLocalDateTime(startDate.value),
                     endTime = parseToLocalDateTime(endDate.value),
-                    place = "", // 장소 시트
+                    place = location.value,
                     awayTeamId = selectedClub.value?.teamId?.toLong() ?: 0L, // 자동완성 시트
-                    longitude = 0.0, // 장소 시트
-                    latitude = 0.0 // 장소 시트
+                    longitude = selectedMap.value?.mapx?.toDouble() ?: 0.0,
+                    latitude = selectedMap.value?.mapy?.toDouble() ?: 0.0
                 )
             )
         }
@@ -289,11 +287,11 @@ private fun AutoCompleteSheet1(
 
             ClickableNavItem(
                 onClick = {
-                val naverMapUri = Uri.parse("https://map.naver.com/")
-                val intent = Intent(Intent.ACTION_VIEW, naverMapUri)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context.startActivity(intent)
-            }
+                    val naverMapUri = Uri.parse("https://map.naver.com/")
+                    val intent = Intent(Intent.ACTION_VIEW, naverMapUri)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    context.startActivity(intent)
+                }
             )
         }
     }
@@ -405,14 +403,20 @@ private fun CalendarSheet(
                 .height(350.dp)
         ) {
             if (setStart.value) {
-                startDate.value = "${it.year}-${it.month}-${it.day}"
+                startDate.value = formatDate(it.year, it.month, it.day)+ " 00:00:00"
                 setStart.value = false
             } else {
-                endDate.value = "${it.year}-${it.month}-${it.day}"
+                endDate.value = formatDate(it.year, it.month, it.day) + " 00:00:00"
             }
             showCalendar.value = false
         }
     }
+}
+
+fun formatDate(year: Int, month: Int, day: Int): String {
+    val formattedMonth = month.toString().padStart(2, '0')
+    val formattedDay = day.toString().padStart(2, '0')
+    return "$year-$formattedMonth-$formattedDay"
 }
 
 
