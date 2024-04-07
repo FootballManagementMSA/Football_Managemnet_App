@@ -5,15 +5,13 @@ import com.example.network_api.entity.ClubSchedule
 import com.example.network_api.response.ClubJoinResponse
 import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
-import com.example.network_api.response.MakeClubScheduleResponse
-import com.example.network_api.response.MapResponse
+import com.example.network_api.response.DefaultApiResponse
 import com.example.network_api.response.SearchClubResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -51,7 +49,7 @@ interface ClubApi {
     suspend fun makeClubSchedule(
         @Path("teamId") teamId: Long,
         @Body clubSchedule: ClubSchedule
-    ): Response<MakeClubScheduleResponse>
+    ): Response<DefaultApiResponse>
 
     @GET("/api/team-service/users/{userId}/teams")
     suspend fun getJoinedClub(

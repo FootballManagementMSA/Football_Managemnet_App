@@ -13,7 +13,7 @@ data class UniqueNumberData(
    val uniqueNumber: String
 )
 
-data class MakeClubScheduleResponse(
+data class DefaultApiResponse(
     val status: Int,
     val message: String,
     val code: String

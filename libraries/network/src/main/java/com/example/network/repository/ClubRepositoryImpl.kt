@@ -8,7 +8,7 @@ import com.example.network_api.entity.ClubSchedule
 import com.example.network_api.repository.ClubRepository
 import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
-import com.example.network_api.response.MakeClubScheduleResponse
+import com.example.network_api.response.DefaultApiResponse
 import com.example.network_api.response.MapResponse
 import com.example.network_api.response.RespResult
 import com.example.network_api.response.SearchClubResponse
@@ -41,7 +41,7 @@ internal class ClubRepositoryImpl @Inject constructor(
     override suspend fun createClubSchedule(
         teamId: Long,
         clubSchedule: ClubSchedule
-    ): RespResult<MakeClubScheduleResponse> {
+    ): RespResult<DefaultApiResponse> {
         val response = clubApi.makeClubSchedule(teamId, clubSchedule)
         return if (response.isSuccessful) {
             RespResult.Success(response.body()!!)
