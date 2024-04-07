@@ -12,7 +12,7 @@ import com.example.network_api.response.SquadResponse
 class SquadRepositoryImpl(
     private val squadApi: SquadApi
 ) : SquadRepository {
-    override fun saveSquad(users: Users): RespResult<DefaultApiResponse> {
+    override suspend fun saveSquad(users: Users): RespResult<DefaultApiResponse> {
         val result = squadApi.saveSquad(users)
         return if(result.isSuccessful){
             RespResult.Success(result.body()!!)
@@ -23,7 +23,7 @@ class SquadRepositoryImpl(
         }
     }
 
-    override fun loadSquad(): RespResult<SquadResponse> {
+    override suspend fun loadSquad(): RespResult<SquadResponse> {
         val result = squadApi.loadSquad()
         return if(result.isSuccessful){
             RespResult.Success(result.body()!!)

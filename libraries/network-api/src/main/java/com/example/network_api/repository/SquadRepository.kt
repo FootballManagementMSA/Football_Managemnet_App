@@ -6,6 +6,6 @@ import com.example.network_api.response.RespResult
 import com.example.network_api.response.SquadResponse
 
 interface SquadRepository {
-    fun saveSquad(users: Users): RespResult<DefaultApiResponse>
-    fun loadSquad(): RespResult<SquadResponse>
+    suspend fun saveSquad(users: Users): RespResult<DefaultApiResponse>
+    suspend fun loadSquad(): RespResult<SquadResponse>
 }
