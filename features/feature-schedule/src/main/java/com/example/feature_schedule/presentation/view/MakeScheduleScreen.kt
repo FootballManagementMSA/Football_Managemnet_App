@@ -77,10 +77,8 @@ fun MakeScheduleScreen(
     val showCalendar = remember { mutableStateOf(false) }
     val showAutoComplete = remember { mutableStateOf(false) }
     val showAutoCompleteCustom = remember { mutableStateOf(false) }
-
     val setStart = remember { mutableStateOf(false) }
     val selectedClub = remember { mutableStateOf<ClubInfo?>(null) }
-
     val selectedMap = remember { mutableStateOf<LocationInfo?>(null) }
 
     if (showCalendar.value) {
