@@ -8,13 +8,14 @@ import com.example.network_api.repository.SquadRepository
 import com.example.network_api.response.DefaultApiResponse
 import com.example.network_api.response.RespResult
 import com.example.network_api.response.SquadResponse
+import javax.inject.Inject
 
-class SquadRepositoryImpl(
+class SquadRepositoryImpl @Inject constructor(
     private val squadApi: SquadApi
 ) : SquadRepository {
     override suspend fun saveSquad(users: Users): RespResult<DefaultApiResponse> {
         val result = squadApi.saveSquad(users)
-        return if(result.isSuccessful){
+        return if (result.isSuccessful) {
             RespResult.Success(result.body()!!)
         } else {
             val errorBodyJson = result.errorBody()?.string() ?: ""
@@ -25,7 +26,7 @@ class SquadRepositoryImpl(
 
     override suspend fun loadSquad(): RespResult<SquadResponse> {
         val result = squadApi.loadSquad()
-        return if(result.isSuccessful){
+        return if (result.isSuccessful) {
             RespResult.Success(result.body()!!)
         } else {
             val errorBodyJson = result.errorBody()?.string() ?: ""
