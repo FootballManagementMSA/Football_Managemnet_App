@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.core.util.PreferenceKeys
 import com.example.core.util.userDataStore
-import com.google.android.gms.tasks.Task
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -90,6 +89,12 @@ internal class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveSelectedTeamId(teamId: Long) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_ID] = teamId
+        }
+    }
+
     override suspend fun login() {
     }
     override suspend fun join(){
@@ -137,5 +142,9 @@ internal class UserLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getSelectedTeamSizeOfUsers(): Int {
         return dataStore.data.first()[PreferenceKeys.TEAM_SIZE_OF_USERS] ?: 0
+    }
+
+    override suspend fun getSelectedTeamId(): Long {
+        return dataStore.data.first()[PreferenceKeys.TEAM_ID] ?: 0
     }
 }

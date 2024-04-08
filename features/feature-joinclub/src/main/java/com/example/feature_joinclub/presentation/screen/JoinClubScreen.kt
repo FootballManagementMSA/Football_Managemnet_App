@@ -44,6 +44,7 @@ fun JoinClubScreen(
     saveTeamEmblem: (String) -> Unit,
     saveCreatedAt: (String) -> Unit,
     saveSizeOfUsers: (Int) -> Unit,
+    saveTeamId: (String) -> Unit
 ) {
     val showSheet = remember {
         mutableStateOf(true)
@@ -83,7 +84,8 @@ fun JoinClubScreen(
                                 saveTeamName,
                                 saveTeamEmblem,
                                 saveCreatedAt,
-                                saveSizeOfUsers
+                                saveSizeOfUsers,
+                                saveTeamId
                             )
                         }
                     }
@@ -143,6 +145,7 @@ fun JoinClubScreenPreview() {
         saveTeamEmblem = {},
         saveTeamName = {},
         saveIntroduce = {},
-        saveRole = {}
+        saveRole = {},
+        saveTeamId = {}
     )
 }

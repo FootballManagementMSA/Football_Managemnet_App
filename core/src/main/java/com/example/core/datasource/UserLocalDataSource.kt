@@ -1,7 +1,5 @@
 package com.example.core.datasource
 
-import com.google.android.gms.tasks.Task
-
 interface UserLocalDataSource {
 
     suspend fun saveFcmToken(fcmToken: String)
@@ -17,6 +15,7 @@ interface UserLocalDataSource {
     suspend fun saveSelectedTeamEmblem(teamEmblem: String)
     suspend fun saveSelectedTeamCreatedAt(createdAt: String)
     suspend fun saveSelectedTeamSizeOfUsers(sizeOfUsers: Int)
+    suspend fun saveSelectedTeamId(teamId: Long)
     suspend fun login()
     suspend fun join()
     suspend fun getAccessToken(): String
@@ -29,4 +28,5 @@ interface UserLocalDataSource {
     suspend fun getSelectedTeamEmblem(): String
     suspend fun getSelectedTeamCreatedAt(): String
     suspend fun getSelectedTeamSizeOfUsers(): Int
+    suspend fun getSelectedTeamId(): Long
 }
