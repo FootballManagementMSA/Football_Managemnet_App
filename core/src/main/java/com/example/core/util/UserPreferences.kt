@@ -11,6 +11,7 @@ val Context.userDataStore by preferencesDataStore(
 )
 
 object PreferenceKeys {
+    val FCM_TOKEN= stringPreferencesKey("FCM_TOKEN")
     val ACCESS_TOKEN = stringPreferencesKey("ACEESS_TOKEN")
     val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     val ACCOUNT = stringPreferencesKey("ACCOUNT")

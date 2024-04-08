@@ -1,6 +1,10 @@
 package com.example.core.datasource
 
+import com.google.android.gms.tasks.Task
+
 interface UserLocalDataSource {
+
+    suspend fun saveFcmToken(fcmToken: String)
     suspend fun saveAccessToken(accessToken: String)
     suspend fun saveAccount(account: String)
     suspend fun savePassword(password: String)

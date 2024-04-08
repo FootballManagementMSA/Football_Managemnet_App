@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.core.util.PreferenceKeys
 import com.example.core.util.userDataStore
+import com.google.android.gms.tasks.Task
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -11,6 +12,12 @@ internal class UserLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context
 ) : UserLocalDataSource {
     private val dataStore = context.userDataStore
+    override suspend fun saveFcmToken(fcmToken: String) {
+        dataStore.edit {
+            it[PreferenceKeys.FCM_TOKEN]=fcmToken
+        }
+    }
+
     override suspend fun saveAccessToken(accessToken: String) {
         dataStore.edit {
             it[PreferenceKeys.ACCESS_TOKEN] = accessToken
