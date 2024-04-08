@@ -1,13 +1,13 @@
 package com.example.core.util
 
-import com.example.network_api.response.JoinedClubDataResponse
+import com.example.core.model.JoinedClubData
 
 object JoinedClubDataUtil {
-    private var joinedClubDataList: List<JoinedClubDataResponse> = emptyList()
+    private var joinedClubDataList: List<JoinedClubData> = emptyList()
 
-    fun setClubDataList(dataList: List<JoinedClubDataResponse>) {
+    fun setClubDataList(dataList: List<JoinedClubData>) {
         joinedClubDataList = dataList
     }
 
-    fun getClubDataList(): List<JoinedClubDataResponse> = joinedClubDataList
+    fun getClubDataList(): List<JoinedClubData> = joinedClubDataList
 }

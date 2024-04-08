@@ -23,7 +23,7 @@ class MainHomeDataSourceImpl @Inject constructor(
     override suspend fun getJoinedClubInfo(): List<JoinedClubData> {
         return when (val result = mainHomeRepository.getJoinedClubInfo()) {
             is RespResult.Success -> {
-                JoinedClubDataUtil.setClubDataList(result.data.data)
+                JoinedClubDataUtil.setClubDataList(result.mapToUiModel().data)
                 result.mapToUiModel().data
             }
 
