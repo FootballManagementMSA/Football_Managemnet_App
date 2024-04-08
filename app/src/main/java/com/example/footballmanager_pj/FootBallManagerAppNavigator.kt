@@ -200,6 +200,9 @@ fun FootBallManagerAppNavigator(
                 },
                 saveSizeOfUsers = {
                     clubSearchViewModel.saveSelectedTeamSizeOfUsers(it)
+                },
+                saveTeamId = {
+                    clubSearchViewModel.saveSelectedTeamId(it)
                 }
             )
         }
