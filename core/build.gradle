@@ -10,4 +10,5 @@ dependencies {
     implementation project(':libraries:network-api')
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     api project(':ui-component')
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.4.1'
 }

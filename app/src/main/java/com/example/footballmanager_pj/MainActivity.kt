@@ -1,7 +1,9 @@
 package com.example.footballmanager_pj
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.feature_navigation.BottomNavItem
 import com.example.feature_navigation.CustomBottomNavigation
@@ -28,6 +31,7 @@ import com.example.feature_navigation.Route
 import com.example.feature_navigation.showBarList
 import com.example.feature_topbar.TopAppBar
 import com.example.footballmanager_pj.ui.theme.Footballmanager_pjTheme
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -18,6 +18,8 @@ import com.example.core.util.FormDataUtil.mapToMultipart
 import com.example.core.util.FormDataUtil.mapToRequestBody
 import com.example.network_api.repository.UserRepository
 import com.example.network_api.response.RespResult
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 internal class UserRemoteDataSourceImpl @Inject constructor(
@@ -62,13 +64,23 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
         val result = userRepository.login(loginModel.mapToEntity())
         return when (result) {
             is RespResult.Success -> {
+                // 로그인 성공 시 Firebase 토큰 가져오기
+                val firebaseToken = FirebaseMessaging.getInstance().token.await()
+
                 with(userLocalDataSource) {
                     saveAccessToken(result.data.tokenData.accessToken)
                     saveAccessToken(result.data.tokenData.refreshToken)
                     saveAccount(loginModel.id)
                     savePassword(loginModel.pw)
                     saveUserId(result.data.tokenData.userId)
+                    Log.d("UserAcessToken",result.data.tokenData.accessToken)
+                    Log.d("UserId",result.data.tokenData.userId.toString())
+
+                    // Firebase 토큰 저장
+                    saveFcmToken(firebaseToken)
+                    Log.d("UserFcm", firebaseToken.toString())
                 }
+
                 LoginResult.Success(
                     result.data.tokenData.accessToken,
                     result.data.tokenData.refreshToken
@@ -80,7 +92,6 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
             }
         }
     }
-
     override suspend fun sendClubInfoData() {
     }
 
