@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">footballmanager_pj</string>
+        <string name="default_notification_channel_id">my_notification_channel_id11</string>
+        <string name="channel_name">My Notification Channel22</string>
+        <string name="channel_description">Description of My Notification Channel33</string>
+
 </resources>
