@@ -141,6 +141,7 @@ fun checkLogOutDialog(
             textColor = Color.White,
             radius = 20.dp
         ) {
+            onJoinRequest()
             navigateToClubPageScreen()
 
         }

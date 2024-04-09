@@ -35,17 +35,15 @@ interface ClubApi {
     ): Response<SearchClubResponse>
 
 
-    @POST("/api/team-service/teams/52/apply")
-    suspend fun clubJoin(
-        @Body JoinReq: ClubJoin
-    ): Response<ClubJoinResponse>
-    /*
+
+
+
     @POST("/api/team-service/teams/{teamId}/apply")
     suspend fun clubJoin(
-        @Path("teamId") teamId:String,
+        @Path("teamId") teamId:Int,
         @Body JoinReq: ClubJoin
     ):Response<ClubJoinResponse>
-    */
+
 
     @POST("/api/team-service/{teamId}/schedules")
     suspend fun makeClubSchedule(

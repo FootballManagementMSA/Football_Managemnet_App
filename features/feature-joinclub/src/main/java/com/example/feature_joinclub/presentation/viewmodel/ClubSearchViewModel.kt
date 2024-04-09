@@ -79,7 +79,7 @@ class ClubSearchViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             val result = clubJoinRequestUseCase(
                 ClubJoinRequestModel(
-                    1,"2"
+                    userId,introduce
                 )
             )
             _JoinResult.emit(result)
