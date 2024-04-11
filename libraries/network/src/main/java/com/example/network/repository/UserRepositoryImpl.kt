@@ -97,10 +97,8 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun clubJoinRequest(clubJoinReq: ClubJoin): RespResult<ClubJoinResponse> {
-
-        val requestId=clubJoinReq.userId
-        val response = clubApi.clubJoin(requestId,clubJoinReq)
+    override suspend fun clubJoinRequest(teamId: Long, clubJoinReq: ClubJoin): RespResult<ClubJoinResponse> {
+        val response = clubApi.clubJoin(teamId,clubJoinReq)
 
         return if (response.isSuccessful) {
             RespResult.Success(response.body()!!)

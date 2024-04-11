@@ -2,6 +2,6 @@ package com.example.core.model
 
 data class ClubJoinRequestModel(
 
-    val userId:Int,
+    val userId: Long,
     val introduce:String
 )

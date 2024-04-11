@@ -3,9 +3,9 @@ package com.example.network_api.api
 import com.example.network_api.entity.ClubJoin
 import com.example.network_api.entity.ClubSchedule
 import com.example.network_api.response.ClubJoinResponse
+import com.example.network_api.response.DefaultApiResponse
 import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
-import com.example.network_api.response.DefaultApiResponse
 import com.example.network_api.response.SearchClubResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -32,15 +32,11 @@ interface ClubApi {
         @Query("search") code: String
     ): Response<SearchClubResponse>
 
-
-
-
-
-    @POST("/api/team-service/teams/{teamId}/apply")
+    @POST("/api/team-service/team/{teamId}/apply")
     suspend fun clubJoin(
-        @Path("teamId") teamId:Int,
+        @Path("teamId") teamId: Long,
         @Body JoinReq: ClubJoin
-    ):Response<ClubJoinResponse>
+    ): Response<ClubJoinResponse>
 
 
     @POST("/api/team-service/{teamId}/schedules")
@@ -53,7 +49,6 @@ interface ClubApi {
     suspend fun getJoinedClub(
         @Path("userId") userId: Long
     ): Response<JoinedClubResponse>
-
 
 
 }

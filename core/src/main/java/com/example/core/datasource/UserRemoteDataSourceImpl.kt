@@ -27,13 +27,14 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource
 ) : UserRemoteDataSource {
     override suspend fun join(joinModel: JoinModel): JoinResult {
-        val result=userRepository.join(joinModel.mapToEntity())
-        return when(result){
-            is RespResult.Success ->{
+        val result = userRepository.join(joinModel.mapToEntity())
+        return when (result) {
+            is RespResult.Success -> {
                 JoinResult.Success(result.data.message)
 
             }
-            is RespResult.Error ->{
+
+            is RespResult.Error -> {
                 JoinResult.Error(result.error.errorMessage)
 
             }
@@ -42,16 +43,20 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
 
     }
 
-    override suspend fun clubJoinRequest(clubJoinRequestModel: ClubJoinRequestModel): ClubJoinRequestResult {
+    override suspend fun clubJoinRequest(
+        teamId: Long,
+        clubJoinRequestModel: ClubJoinRequestModel
+    ): ClubJoinRequestResult {
 
-        val result=userRepository.clubJoinRequest(clubJoinRequestModel.mapToEntity())
+        val result = userRepository.clubJoinRequest(teamId, clubJoinRequestModel.mapToEntity())
 
-        return when(result){
-            is RespResult.Success ->{
+        return when (result) {
+            is RespResult.Success -> {
                 ClubJoinRequestResult.Success(result.data.message)
 
             }
-            is RespResult.Error ->{
+
+            is RespResult.Error -> {
                 ClubJoinRequestResult.Error(result.error.errorMessage)
 
             }
@@ -73,8 +78,8 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
                     saveAccount(loginModel.id)
                     savePassword(loginModel.pw)
                     saveUserId(result.data.tokenData.userId)
-                    Log.d("UserAcessToken",result.data.tokenData.accessToken)
-                    Log.d("UserId",result.data.tokenData.userId.toString())
+                    Log.d("UserAcessToken", result.data.tokenData.accessToken)
+                    Log.d("UserId", result.data.tokenData.userId.toString())
 
                     // Firebase 토큰 저장
                     saveFcmToken(firebaseToken)
@@ -92,6 +97,7 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
             }
         }
     }
+
     override suspend fun sendClubInfoData() {
     }
 

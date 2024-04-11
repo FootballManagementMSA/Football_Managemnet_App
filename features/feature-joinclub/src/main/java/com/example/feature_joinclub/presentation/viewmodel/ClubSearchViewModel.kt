@@ -11,6 +11,7 @@ import com.example.feature_joinclub.domain.usecase.ClubJoinRequestUseCase
 import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
 import com.example.feature_joinclub.domain.usecase.GetSelectedTeamCreatedAtUseCase
 import com.example.feature_joinclub.domain.usecase.GetSelectedTeamSizeOfUsersUseCase
+import com.example.feature_joinclub.domain.usecase.GetUserIdUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamCreatedAtUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamEmblemUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamIdUseCase
@@ -45,25 +46,29 @@ class ClubSearchViewModel @Inject constructor(
     private val saveSelectedTeamIdUseCase: SaveSelectedTeamIdUseCase,
     private val getSelectedTeamSizeOfUsersUseCase: GetSelectedTeamSizeOfUsersUseCase,
     private val getSelectedTeamCreatedAtUseCase: GetSelectedTeamCreatedAtUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-): ViewModel(){
+) : ViewModel() {
     private val _searchValue = MutableStateFlow("")
-    val searchValue: StateFlow<String> =_searchValue
+    val searchValue: StateFlow<String> = _searchValue
 
     private val _searchedClub = MutableStateFlow<List<ClubInfo>>(listOf())
     val searchedClub: StateFlow<List<ClubInfo>> = _searchedClub
 
     private val _introduceValue = MutableStateFlow("")
-    val introduceValue: StateFlow<String> =_introduceValue
+    val introduceValue: StateFlow<String> = _introduceValue
 
     private val _userIdValue = MutableStateFlow("")
-    val userIdValue: StateFlow<String> =_userIdValue
+    val userIdValue: StateFlow<String> = _userIdValue
 
-    private val _JoinResult = MutableSharedFlow<ClubJoinRequestResult>(replay = 1)
-    val JoinResult: SharedFlow<ClubJoinRequestResult> = _JoinResult.asSharedFlow()
+    private val _joinResult = MutableSharedFlow<ClubJoinRequestResult>(replay = 1)
+    val joinResult: SharedFlow<ClubJoinRequestResult> = _joinResult.asSharedFlow()
 
     private val _joinedClub = MutableStateFlow<List<UserTeamInfoModel>>(listOf())
-    val joinedClub : StateFlow<List<UserTeamInfoModel>> = _joinedClub
+    val joinedClub: StateFlow<List<UserTeamInfoModel>> = _joinedClub
+
+    private val _introText = MutableStateFlow("")
+    val introText: StateFlow<String> = _introText
 
     init {
         getJoinedClubList()
@@ -75,16 +80,21 @@ class ClubSearchViewModel @Inject constructor(
             _searchedClub.value = searchClubUseCase(clubName)
         }
     }
-    fun clubJoinReqeust(userId:Int,introduce:String){
-        _introduceValue.value=introduce
-        _userIdValue.value=userId.toString()
+
+    fun updateIntroText(newText: String) {
+        _introText.value = newText
+    }
+
+    fun clubJoinReqeust(teamId: Long) {
         viewModelScope.launch(ioDispatcher) {
+            val userId = getUserIdUseCase()
             val result = clubJoinRequestUseCase(
+                teamId,
                 ClubJoinRequestModel(
-                    userId,introduce
+                    userId, introText.value
                 )
             )
-            _JoinResult.emit(result)
+            _joinResult.emit(result)
         }
     }
 

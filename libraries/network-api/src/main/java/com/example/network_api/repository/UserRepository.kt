@@ -16,7 +16,7 @@ import okhttp3.RequestBody
 interface UserRepository {
     suspend fun login(loginReq: Login): RespResult<LoginResponse>
     suspend fun join(joinReq: Join): RespResult<JoinResponse>
-    suspend fun clubJoinRequest(clubJoinReq: ClubJoin):RespResult<ClubJoinResponse>
+    suspend fun clubJoinRequest(teamId: Long, clubJoinReq: ClubJoin):RespResult<ClubJoinResponse>
     suspend fun getUserInfo(): RespResult<UserInfoResponse>
     suspend fun modifyUserInfo(
         name: RequestBody,
