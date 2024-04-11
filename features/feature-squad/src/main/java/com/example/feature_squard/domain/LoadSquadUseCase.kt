@@ -6,6 +6,9 @@ import javax.inject.Inject
 class LoadSquadUseCase @Inject constructor(
     private val squadDataSource: SquadDataSource
 ) {
-    suspend operator fun invoke() = squadDataSource.loadSquad()
+    suspend operator fun invoke(
+        teamId: Long,
+        scheduleId: Long,
+    ) = squadDataSource.loadSquad(teamId, scheduleId)
 
 }

@@ -6,13 +6,19 @@ import com.example.network_api.response.SquadResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface SquadApi {
     @GET("/api/team-service/schedules/{scheduleId}/teams/{teamId}/squad")
     fun saveSquad(
+        @Path("teamId") teamId: Long,
+        @Path("scheduleId") scheduleId: Long,
         @Body users: Users
     ): Response<DefaultApiResponse>
 
     @GET("/api/team-service/schedules/{scheduleId}/teams/{teamId}/squad")
-    fun loadSquad(): Response<SquadResponse>
+    fun loadSquad(
+        @Path("teamId") teamId: Long,
+        @Path("scheduleId") scheduleId: Long,
+    ): Response<SquadResponse>
 }

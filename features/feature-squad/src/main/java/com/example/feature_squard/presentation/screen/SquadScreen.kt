@@ -44,7 +44,7 @@ import com.example.ui_component.values.mainTheme
 fun SquadScreen(viewModel: SquadViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
-        viewModel.loadPreset()
+        viewModel.loadPreset(0L, 0L) // teamId, scheduleId 기입해야함
     }
     when (state) {
         is SquadState.Loading -> {
@@ -56,7 +56,7 @@ fun SquadScreen(viewModel: SquadViewModel = hiltViewModel()) {
                 onLoad = { (state as SquadState.Success).data },
                 onSet = { position ->
                     Log.e("callback", "$position")
-                    viewModel.savePosition(UserData(position))
+                    viewModel.savePosition(0L, 0L, UserData(position)) // teamId, scheduleId 기입해야함
                 })
         }
     }

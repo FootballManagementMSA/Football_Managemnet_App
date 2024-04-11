@@ -25,9 +25,12 @@ class SquadViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<SquadState>(SquadState.Loading)
     val uiState get() = _uiState
 
-    fun loadPreset() = viewModelScope.launch {
-        val result = loadSquadUseCase()
-        when(result){
+    fun loadPreset(
+        teamId: Long,
+        scheduleId: Long,
+    ) = viewModelScope.launch {
+        val result = loadSquadUseCase(teamId, scheduleId)
+        when (result) {
             is SquadResult.Success<*> -> {
                 _uiState.value = SquadState.Success(result.data as UserData)
             }
@@ -38,7 +41,11 @@ class SquadViewModel @Inject constructor(
         }
     }
 
-    fun savePosition(positions: UserData) = viewModelScope.launch {
-        saveSquadUseCase(positions)
+    fun savePosition(
+        teamId: Long,
+        scheduleId: Long,
+        users: UserData
+    ) = viewModelScope.launch {
+        saveSquadUseCase(teamId, scheduleId, users)
     }
 }

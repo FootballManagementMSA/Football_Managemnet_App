@@ -9,4 +9,12 @@ data class User(
     val image: String,
     val xCoordinate: Double,
     val yCoordinate: Double
-)
+) {
+    companion object {
+        fun User.toEntity(id: Int) = com.example.network_api.entity.User(
+            id.toLong(),
+            xCoordinate,
+            yCoordinate
+        )
+    }
+}

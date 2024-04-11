@@ -9,7 +9,11 @@ import javax.inject.Inject
 class SaveSquadUseCase @Inject constructor(
     private val squadDataSource: SquadDataSource
 ) {
-    suspend operator fun invoke(userData: UserData) {
-        squadDataSource.saveSquad(Users(userData.users).toEntity())
+    suspend operator fun invoke(
+        teamId: Long,
+        scheduleId: Long,
+        userData: UserData
+    ) {
+        squadDataSource.saveSquad(teamId, scheduleId, userData)
     }
 }
