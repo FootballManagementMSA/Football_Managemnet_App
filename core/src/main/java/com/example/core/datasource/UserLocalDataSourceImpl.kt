@@ -11,6 +11,12 @@ internal class UserLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context
 ) : UserLocalDataSource {
     private val dataStore = context.userDataStore
+    override suspend fun saveFcmToken(fcmToken: String) {
+        dataStore.edit {
+            it[PreferenceKeys.FCM_TOKEN]=fcmToken
+        }
+    }
+
     override suspend fun saveAccessToken(accessToken: String) {
         dataStore.edit {
             it[PreferenceKeys.ACCESS_TOKEN] = accessToken
@@ -83,6 +89,12 @@ internal class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveSelectedTeamId(teamId: Long) {
+        dataStore.edit {
+            it[PreferenceKeys.TEAM_ID] = teamId
+        }
+    }
+
     override suspend fun login() {
     }
     override suspend fun join(){
@@ -130,5 +142,9 @@ internal class UserLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getSelectedTeamSizeOfUsers(): Int {
         return dataStore.data.first()[PreferenceKeys.TEAM_SIZE_OF_USERS] ?: 0
+    }
+
+    override suspend fun getSelectedTeamId(): Long {
+        return dataStore.data.first()[PreferenceKeys.TEAM_ID] ?: 0
     }
 }

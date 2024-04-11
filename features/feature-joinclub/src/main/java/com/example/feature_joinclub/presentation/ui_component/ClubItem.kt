@@ -137,7 +137,8 @@ fun JoinedClubContent(
     saveTeamName: (String) -> Unit,
     saveTeamEmblem: (String) -> Unit,
     saveCreatedAt: (String) -> Unit,
-    saveSizeOfUsers: (Int) -> Unit
+    saveSizeOfUsers: (Int) -> Unit,
+    saveTeamId: (String) ->Unit
 ) {
     Row(
         Modifier
@@ -151,6 +152,7 @@ fun JoinedClubContent(
                 saveTeamEmblem(club.teamEmblem)
                 saveCreatedAt(club.createdAt)
                 saveSizeOfUsers(club.sizeOfUsers)
+                saveTeamId(club.unique_num)
                 onNavigateToClubPage()
             },
         horizontalArrangement = Arrangement.SpaceBetween

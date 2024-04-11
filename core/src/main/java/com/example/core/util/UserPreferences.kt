@@ -11,6 +11,7 @@ val Context.userDataStore by preferencesDataStore(
 )
 
 object PreferenceKeys {
+    val FCM_TOKEN= stringPreferencesKey("FCM_TOKEN")
     val ACCESS_TOKEN = stringPreferencesKey("ACEESS_TOKEN")
     val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     val ACCOUNT = stringPreferencesKey("ACCOUNT")
@@ -23,4 +24,5 @@ object PreferenceKeys {
     val TEAM_EMBLEM = stringPreferencesKey("TEAM_EMBLEM")
     val TEAM_CREATED_AT = stringPreferencesKey("TEAM_CREATED_AT")
     val TEAM_SIZE_OF_USERS = intPreferencesKey("TEAM_SIZE_OF_USERS")
+    val TEAM_ID = longPreferencesKey("TEAM_ID")
 }

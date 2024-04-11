@@ -1,6 +1,8 @@
 package com.example.core.datasource
 
 interface UserLocalDataSource {
+
+    suspend fun saveFcmToken(fcmToken: String)
     suspend fun saveAccessToken(accessToken: String)
     suspend fun saveAccount(account: String)
     suspend fun savePassword(password: String)
@@ -13,6 +15,7 @@ interface UserLocalDataSource {
     suspend fun saveSelectedTeamEmblem(teamEmblem: String)
     suspend fun saveSelectedTeamCreatedAt(createdAt: String)
     suspend fun saveSelectedTeamSizeOfUsers(sizeOfUsers: Int)
+    suspend fun saveSelectedTeamId(teamId: Long)
     suspend fun login()
     suspend fun join()
     suspend fun getAccessToken(): String
@@ -25,4 +28,5 @@ interface UserLocalDataSource {
     suspend fun getSelectedTeamEmblem(): String
     suspend fun getSelectedTeamCreatedAt(): String
     suspend fun getSelectedTeamSizeOfUsers(): Int
+    suspend fun getSelectedTeamId(): Long
 }

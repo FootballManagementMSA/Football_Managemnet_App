@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "224304249241",
+    "project_id": "fcm-kotlin-6c5fe",
+    "storage_bucket": "fcm-kotlin-6c5fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224304249241:android:f9aa2e347785da27393b08",
+        "android_client_info": {
+          "package_name": "com.example.footballmanager_pj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0HGcNrgdLphj9dX68pH8wF4K-bCRUPPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

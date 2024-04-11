@@ -13,6 +13,7 @@ import com.example.feature_joinclub.domain.usecase.GetSelectedTeamCreatedAtUseCa
 import com.example.feature_joinclub.domain.usecase.GetSelectedTeamSizeOfUsersUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamCreatedAtUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamEmblemUseCase
+import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamIdUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamIntroduceUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamNameUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamRoleUseCase
@@ -41,6 +42,7 @@ class ClubSearchViewModel @Inject constructor(
     private val saveSelectedTeamEmblemUseCase: SaveSelectedTeamEmblemUseCase,
     private val saveSelectedTeamCreatedAtUseCase: SaveSelectedTeamCreatedAtUseCase,
     private val saveSelectedTeamSizeOfUsersUseCase: SaveSelectedTeamSizeOfUsersUseCase,
+    private val saveSelectedTeamIdUseCase: SaveSelectedTeamIdUseCase,
     private val getSelectedTeamSizeOfUsersUseCase: GetSelectedTeamSizeOfUsersUseCase,
     private val getSelectedTeamCreatedAtUseCase: GetSelectedTeamCreatedAtUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -79,7 +81,7 @@ class ClubSearchViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             val result = clubJoinRequestUseCase(
                 ClubJoinRequestModel(
-                    1,"2"
+                    userId,introduce
                 )
             )
             _JoinResult.emit(result)
@@ -131,6 +133,12 @@ class ClubSearchViewModel @Inject constructor(
     fun saveSelectedTeamSizeOfUsers(sizeOfUsers: Int) {
         viewModelScope.launch {
             saveSelectedTeamSizeOfUsersUseCase(sizeOfUsers)
+        }
+    }
+
+    fun saveSelectedTeamId(uniqueNum: String) {
+        viewModelScope.launch {
+            saveSelectedTeamIdUseCase(uniqueNum)
         }
     }
 }
