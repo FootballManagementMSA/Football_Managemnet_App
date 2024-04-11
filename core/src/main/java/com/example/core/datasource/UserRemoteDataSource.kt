@@ -17,7 +17,7 @@ interface UserRemoteDataSource {
     suspend fun sendClubInfoData()
     suspend fun getJoinClubUserInfo(): List<UserInfo>
     suspend fun join(joinModel: JoinModel): JoinResult
-    suspend fun clubJoinRequest(clubJoinRequestModel: ClubJoinRequestModel):ClubJoinRequestResult
+    suspend fun clubJoinRequest(teamId: Long, clubJoinRequestModel: ClubJoinRequestModel):ClubJoinRequestResult
     suspend fun getUserInfo(): MyPageUserInfoUiModel
     suspend fun modifyUserInfo(modifyUserInfoModel: ModifyUserInfoModel): BaseResult
     suspend fun signOut(): SignOut

@@ -1,5 +1,6 @@
 package com.example.feature_joinclub.presentation.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,16 +15,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.core.ResultState.ClubJoinRequestResult
 import com.example.core.model.ClubInfo
 import com.example.feature_joinclub.presentation.ui_component.ClubContent
 import com.example.feature_joinclub.presentation.ui_component.ClubItem
@@ -44,13 +49,36 @@ fun ClubSearchScreen(
     viewModel: ClubSearchViewModel = hiltViewModel(),
     teamList:State<List<ClubInfo>>,
     value: String
-
-
 ) {
     val selectedIndex = remember {
         mutableStateOf(-1)
     }
     val isDialogOpen = remember { mutableStateOf<Boolean>(false) }
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.joinResult.collect { joinResult ->
+            when (joinResult) {
+                is ClubJoinRequestResult.Success -> {
+                    Toast.makeText(
+                        context,
+                        "성공!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+
+                is ClubJoinRequestResult.Error -> {
+                    Toast.makeText(
+                        context,
+                        "요청 실패: ${(joinResult as ClubJoinRequestResult.Error).errorMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        }
+    }
 
     Column(
         Modifier
@@ -95,9 +123,11 @@ fun ClubSearchScreen(
                     ClubContent(club = club)
                 }
                 if (isDialogOpen.value) {
-                    checkLogOutDialog(
+                    joinClubDialog(
                         name = "hi",
-                        onJoinRequest = { viewModel.clubJoinReqeust(1,"안녕하세요 가입 신청입니다.") }
+                        introText = viewModel.introText.collectAsState().value,
+                        onIntroTextChange = { newText -> viewModel.updateIntroText(newText) },
+                        onJoinRequest = { viewModel.clubJoinReqeust(club.teamId.toLong()) }
                         ,
                         navigateToClubPageScreen = {
                             onNavigateToRequestJoin()
@@ -115,10 +145,12 @@ fun ClubSearchScreen(
 
 
 @Composable
-fun checkLogOutDialog(
+fun joinClubDialog(
     name: String,
+    introText: String,
+    onIntroTextChange: (String) -> Unit,
     navigateToClubPageScreen: () -> Unit,
-    onJoinRequest:()->Unit,
+    onJoinRequest: () -> Unit,
     onDismiss: () -> Unit
 ) {
     DefaultDialog(
@@ -129,8 +161,8 @@ fun checkLogOutDialog(
 
         Text(text = "자기 소개 입력")
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = introText,
+            onValueChange = onIntroTextChange,
             label = { Text("자기 소개 글을 입력해주세요.") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,14 +179,6 @@ fun checkLogOutDialog(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun checkLogOutDialogPreview() {
-    checkLogOutDialog("test", {}, {})
-}
-*/
 
 @Composable
 @Preview
