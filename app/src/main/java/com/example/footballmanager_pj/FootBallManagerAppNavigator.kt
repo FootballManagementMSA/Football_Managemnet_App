@@ -68,7 +68,7 @@ fun FootBallManagerAppNavigator(
         }
         composable(Route.CLUB_PAGE) {
             onNavigate(Route.CLUB_PAGE)
-            ClubPageScreen()
+            ClubPageScreen(navHostController)
         }
         composable(Route.STUDENT_VERIFICATION) {
             onNavigate(Route.STUDENT_VERIFICATION)

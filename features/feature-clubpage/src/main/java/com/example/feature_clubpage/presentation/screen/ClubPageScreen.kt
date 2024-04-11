@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.model.ClubMemberUiModel
 import com.example.core.model.ScheduleUiModel
 import com.example.feature_clubpage.presentation.ui_component.ClubInfoView
@@ -23,7 +25,7 @@ import com.example.feature_clubpage.presentation.ui_component.generateDummyData1
 import com.example.ui_component.values.mainTheme
 
 @Composable
-fun ClubPageScreen() {
+fun ClubPageScreen(navHostController: NavHostController) {
     val config = LocalConfiguration.current
     val currentSchedule = remember {
         mutableStateOf(
@@ -61,6 +63,7 @@ fun ClubPageScreen() {
                     .weight(3f)
             )
             ScheduleView_Sample(
+                navHostController = navHostController,
                 Modifier
                     .weight(7f), currentSchedule,currentClubMember
             )
@@ -96,5 +99,5 @@ fun ProfileScreenPreview() {
 @Composable
 @Preview
 fun ClubPageScreenPreview() {
-    ClubPageScreen()
+    ClubPageScreen(rememberNavController())
 }
