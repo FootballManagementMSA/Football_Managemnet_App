@@ -29,6 +29,8 @@ import com.example.core.model.LocalScreen
 import com.example.core.model.MemberUiModel
 import com.example.core.model.Position
 import com.example.core.model.PositionPresetUIModel
+import com.example.core.model.User
+import com.example.core.model.UserData
 import com.example.feature_squard.presentation.SquadState
 import com.example.feature_squard.presentation.ui_component.CandidateView
 import com.example.feature_squard.presentation.ui_component.DraggableMember
@@ -54,7 +56,7 @@ fun SquadScreen(viewModel: SquadViewModel = hiltViewModel()) {
                 onLoad = { (state as SquadState.Success).data },
                 onSet = { position ->
                     Log.e("callback", "$position")
-                    viewModel.savePosition(position)
+                    viewModel.savePosition(UserData(position))
                 })
         }
     }
@@ -63,10 +65,10 @@ fun SquadScreen(viewModel: SquadViewModel = hiltViewModel()) {
 
 @Composable
 private fun SquadContent(
-    onLoad: () -> PositionPresetUIModel,
-    onSet: (List<MemberUiModel>) -> Unit
+    onLoad: () -> UserData,
+    onSet: (List<User>) -> Unit
 ) {
-    val positions = remember { onLoad().members.toMutableList() }
+    val positions = remember { onLoad().users.toMutableList() }
     val showSheet = remember { mutableStateOf(false) }
     val config = LocalConfiguration.current
     Box(
@@ -88,7 +90,12 @@ private fun SquadContent(
         }
         positions.forEachIndexed { index, _ ->
             DraggableMember(
-                onLoad = { onLoad().members[index] to onLoad().screenSize },
+                onLoad = {
+                    onLoad().users[index] to LocalScreen(
+                        config.screenWidthDp.toDouble(),
+                        config.screenHeightDp.toDouble()
+                    )
+                },
                 onDrag = { newPosition ->
                     positions[index] = newPosition
                 },
@@ -115,18 +122,4 @@ private fun SquadContent(
 @Composable
 @Preview
 fun SquadContentPreview() {
-    SquadContent(onLoad = {
-        PositionPresetUIModel(
-            screenSize = LocalScreen(768.0, 1280.0),
-            members = listOf(
-                MemberUiModel(
-                    id = "1",
-                    name = "홍길동",
-                    number = "11",
-                    role = "NF",
-                    position = Position(300f, 500f)
-                )
-            )
-        )
-    }, onSet = {})
 }
