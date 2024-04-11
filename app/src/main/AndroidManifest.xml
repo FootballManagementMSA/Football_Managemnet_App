@@ -42,7 +42,12 @@
             </intent-filter>
         </service>
 
-
+        <receiver android:name=".NotificationActionReceiver">
+            <intent-filter>
+                <action android:name="ACCEPT_ACTION" />
+                <action android:name="DECLINE_ACTION" />
+            </intent-filter>
+        </receiver>
 
 
 
