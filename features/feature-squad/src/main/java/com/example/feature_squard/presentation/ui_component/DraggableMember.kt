@@ -28,13 +28,14 @@ import androidx.compose.ui.unit.dp
 import com.example.core.model.LocalScreen
 import com.example.core.model.MemberUiModel
 import com.example.core.model.Position
+import com.example.core.model.User
 import com.example.ui_component.R
 import kotlin.math.roundToInt
 
 @Composable
 fun DraggableMember(
-    onLoad: () -> Pair<MemberUiModel, LocalScreen>,
-    onDrag: (MemberUiModel) -> Unit,
+    onLoad: () -> Pair<User, LocalScreen>,
+    onDrag: (User) -> Unit,
     onSet: () -> Unit
 ) {
     val context = LocalContext.current
@@ -44,11 +45,11 @@ fun DraggableMember(
         Modifier
             .offset {
                 IntOffset(
-                    member.position.x
+                    member.xCoordinate
                         .roundToInt()
                         .coerceAtLeast(0)
                         .coerceAtMost(screenSize.width.toInt()),
-                    member.position.y
+                    member.yCoordinate
                         .roundToInt()
                         .coerceAtLeast(0)
                         .coerceAtMost(screenSize.height.toInt()),
@@ -58,15 +59,15 @@ fun DraggableMember(
                 detectDragGestures { change, dragAmount ->
                     change.consume()
                     member = member.copy(
-                        position = Position(
-                            x = (member.position.x + dragAmount.x)
-                                .coerceAtLeast(0f)
-                                .coerceAtMost(screenSize.width.toFloat()),
-                            y = (member.position.y + dragAmount.y)
-                                .coerceAtLeast(0f)
-                                .coerceAtMost(screenSize.height.toFloat())
-                        )
+
+                        xCoordinate = (member.xCoordinate + dragAmount.x)
+                            .coerceAtLeast(0.0)
+                            .coerceAtMost(screenSize.width),
+                        yCoordinate = (member.yCoordinate + dragAmount.y)
+                            .coerceAtLeast(0.0)
+                            .coerceAtMost(screenSize.height)
                     )
+
                     onDrag(member)
                 }
             }
