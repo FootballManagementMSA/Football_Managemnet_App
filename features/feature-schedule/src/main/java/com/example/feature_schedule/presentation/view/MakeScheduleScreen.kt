@@ -66,7 +66,7 @@ import androidx.compose.ui.text.style.TextOverflow
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MakeScheduleScreen(
-    onMake: (Long, ClubSchedule) -> Unit
+    onMake: (ClubSchedule) -> Unit
 ) {
     val myUri = remember { mutableStateOf<Uri?>(null) }
     val title = remember { mutableStateOf("") }
@@ -127,7 +127,6 @@ fun MakeScheduleScreen(
             roundedCornerShape = RoundedCornerShape(8.dp)
         ) {
             onMake(
-                0L, // 내 팀 아이디
                 ClubSchedule(
                     title = title.value,
                     memo = memo.value,
@@ -424,9 +423,7 @@ fun formatDate(year: Int, month: Int, day: Int): String {
 @Preview
 @Composable
 fun MakeScheduleScreenPreview() {
-    MakeScheduleScreen { a, b ->
 
-    }
 }
 
 

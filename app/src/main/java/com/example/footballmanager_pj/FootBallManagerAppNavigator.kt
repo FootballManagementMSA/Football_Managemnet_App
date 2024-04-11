@@ -86,9 +86,9 @@ fun FootBallManagerAppNavigator(
             )
         }
         composable("make_schedule") {
-            MakeScheduleScreen { id, schedule ->
-                Log.e("123", "$id $schedule")
-                scheduleViewModel.makeClub(id, schedule)
+            MakeScheduleScreen { schedule ->
+                Log.e("123", "$schedule")
+                scheduleViewModel.makeClub(schedule)
             }
         }
         composable(Route.PROFILE_SETTING) {
