@@ -143,9 +143,16 @@ fun MakeScheduleScreen(
     }
 }
 
-fun parseToLocalDateTime(dateString: String): LocalDateTime {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    return LocalDateTime.parse(dateString, formatter)
+fun parseToLocalDateTime(dateString: String): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val outputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME // "2024-04-15T00:00:00" 형식
+
+    // 입력 문자열을 LocalDateTime 객체로 변환
+    val date = LocalDateTime.parse(dateString, inputFormatter)
+
+    // 원하는 형식으로 LocalDateTime 객체를 문자열로 변환
+    val formattedDate = date.format(outputFormatter)
+    return formattedDate
 }
 
 @Composable
