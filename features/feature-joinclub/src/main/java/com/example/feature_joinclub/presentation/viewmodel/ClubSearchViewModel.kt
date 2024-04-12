@@ -9,8 +9,6 @@ import com.example.core.model.UserTeamInfoModel
 import com.example.coroutine.IoDispatcher
 import com.example.feature_joinclub.domain.usecase.ClubJoinRequestUseCase
 import com.example.feature_joinclub.domain.usecase.GetJoinedClubUseCase
-import com.example.feature_joinclub.domain.usecase.GetSelectedTeamCreatedAtUseCase
-import com.example.feature_joinclub.domain.usecase.GetSelectedTeamSizeOfUsersUseCase
 import com.example.feature_joinclub.domain.usecase.GetUserIdUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamCreatedAtUseCase
 import com.example.feature_joinclub.domain.usecase.SaveSelectedTeamEmblemUseCase
@@ -44,8 +42,6 @@ class ClubSearchViewModel @Inject constructor(
     private val saveSelectedTeamCreatedAtUseCase: SaveSelectedTeamCreatedAtUseCase,
     private val saveSelectedTeamSizeOfUsersUseCase: SaveSelectedTeamSizeOfUsersUseCase,
     private val saveSelectedTeamIdUseCase: SaveSelectedTeamIdUseCase,
-    private val getSelectedTeamSizeOfUsersUseCase: GetSelectedTeamSizeOfUsersUseCase,
-    private val getSelectedTeamCreatedAtUseCase: GetSelectedTeamCreatedAtUseCase,
     private val getUserIdUseCase: GetUserIdUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {

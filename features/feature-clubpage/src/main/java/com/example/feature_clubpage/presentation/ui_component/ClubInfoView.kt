@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +35,8 @@ import com.example.ui_component.values.veryBigFont
 
 @Composable
 fun ClubInfoView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    createdAt: State<String>
 ) {
 
     Column(
@@ -50,6 +53,7 @@ fun ClubInfoView(
                 modifier = Modifier
                     .weight(2.5f)
                     .fillMaxSize(),
+                createdAt
             )
             ProfileImage(
                 modifier = Modifier
@@ -61,7 +65,7 @@ fun ClubInfoView(
 }
 
 @Composable
-fun Info(modifier: Modifier = Modifier) {
+fun Info(modifier: Modifier = Modifier, createdAt: State<String>) {
     Column(modifier) {
 
         Spacer(modifier = Modifier.weight(0.01f))
@@ -109,7 +113,7 @@ fun Info(modifier: Modifier = Modifier) {
 
             }
             Text(
-                text = "2024.03.16",
+                text = createdAt.value,
                 fontSize = tinyFont,
                 style = TextStyle(grayText2)
             )
@@ -149,6 +153,7 @@ fun ProfileViewPreview() {
                 Modifier
                     .weight(1f)
                     .fillMaxSize(),
+                createdAt = mutableStateOf("")
             )
             ProfileImage(
                 Modifier
