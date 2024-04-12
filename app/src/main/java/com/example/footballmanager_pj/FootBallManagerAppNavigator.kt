@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.feature_clubpage.presentation.ClubPageViewModel
 import com.example.feature_clubpage.presentation.screen.ClubPageScreen
 import com.example.feature_join.presentation.screen.JoinScreen
 import com.example.feature_join.presentation.screen.JoinSuccessScreen1
@@ -49,6 +50,7 @@ fun FootBallManagerAppNavigator(
     val makeClubViewModel: MakeClubViewModel = hiltViewModel()
     val scheduleViewModel: ScheduleViewModel = hiltViewModel()
     val joinViewModel: JoinViewModel = hiltViewModel()
+    val clubPageViewModel: ClubPageViewModel = hiltViewModel()
 
     NavHost(
         modifier = Modifier.padding(vertical = if (showBarList.contains(uiRoute.value)) 60.dp else 0.dp),
@@ -64,11 +66,24 @@ fun FootBallManagerAppNavigator(
             LoginScreen(
                 navHostController,
                 onNavigateToStudentVertificationScreen = {
-                    navHostController.navigate("STUDENT_VERIFICATION") })
+                    navHostController.navigate("STUDENT_VERIFICATION")
+                })
         }
         composable(Route.CLUB_PAGE) {
             onNavigate(Route.CLUB_PAGE)
-            ClubPageScreen(navHostController)
+            ClubPageScreen(
+                navHostController,
+                getCreatedAt = { clubPageViewModel.getCreatedAt() },
+                clubPageViewModel.createdAt.collectAsState(),
+                getTeamSizeOfUsers = { clubPageViewModel.getTeamSizeOfUsers() },
+                clubPageViewModel.sizeOfUsers.collectAsState(),
+                getTeamUniqueNum = { clubPageViewModel.getTeamUniqueNum() },
+                clubPageViewModel.uniqueNum.collectAsState(),
+                getTeamName = { clubPageViewModel.getTeamName() },
+                clubPageViewModel.teamName.collectAsState(),
+                getTeamEmblem = { clubPageViewModel.getTeamEmblem() },
+                clubPageViewModel.emblem.collectAsState()
+            )
         }
         composable(Route.STUDENT_VERIFICATION) {
             onNavigate(Route.STUDENT_VERIFICATION)

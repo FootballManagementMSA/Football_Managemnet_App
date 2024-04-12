@@ -10,7 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,10 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.core.model.ClubMemberUiModel
 import com.example.core.model.ScheduleUiModel
-import com.example.feature_clubpage.presentation.ClubPageViewModel
 import com.example.feature_clubpage.presentation.ui_component.ClubInfoView
 import com.example.feature_clubpage.presentation.ui_component.ScheduleView_Sample
 import com.example.feature_clubpage.presentation.ui_component.generateDummyData
@@ -30,7 +27,19 @@ import com.example.feature_clubpage.presentation.ui_component.generateDummyData1
 import com.example.ui_component.values.mainTheme
 
 @Composable
-fun ClubPageScreen(navHostController: NavHostController,clubPageViewModel: ClubPageViewModel = hiltViewModel()) {
+fun ClubPageScreen(
+    navHostController: NavHostController,
+    getCreatedAt: () -> Unit,
+    createdAt: State<String>,
+    getTeamSizeOfUsers: () -> Unit,
+    teamSize: State<String>,
+    getTeamUniqueNum: () -> Unit,
+    uniqueNum: State<String>,
+    getTeamName: () -> Unit,
+    teamName: State<String>,
+    getTeamEmblem: () -> Unit,
+    emblem: State<String>
+) {
     val config = LocalConfiguration.current
     val currentSchedule = remember {
         mutableStateOf(
@@ -48,9 +57,12 @@ fun ClubPageScreen(navHostController: NavHostController,clubPageViewModel: ClubP
     }
 
     val scrollState = rememberScrollState()
-    val createdAt = clubPageViewModel.createdAt.collectAsState()
     LaunchedEffect(key1 = true) {
-        clubPageViewModel.getCreatedAt()
+        getCreatedAt()
+        getTeamSizeOfUsers()
+        getTeamUniqueNum()
+        getTeamName()
+        getTeamEmblem()
     }
     Column(
         if (isScrollable(config))
@@ -70,32 +82,43 @@ fun ClubPageScreen(navHostController: NavHostController,clubPageViewModel: ClubP
             ProfileView(
                 modifier = Modifier
                     .weight(3f),
-                createdAt
+                createdAt = createdAt,
+                sizeOfUsers = teamSize,
+                uniqueNum = uniqueNum,
+                teamName = teamName,
+                emblem = emblem
             )
             ScheduleView_Sample(
                 navHostController = navHostController,
                 Modifier
-                    .weight(7f), currentSchedule,currentClubMember
+                    .weight(7f), currentSchedule, currentClubMember
             )
         }
     }
 
 }
-//
 
 private fun isScrollable(config: Configuration) = config.screenHeightDp.dp > 800.dp
 
 @Composable
 private fun ProfileView(
     modifier: Modifier = Modifier,
-    createdAt: State<String>
+    createdAt: State<String>,
+    sizeOfUsers: State<String>,
+    uniqueNum: State<String>,
+    teamName: State<String>,
+    emblem: State<String>
 ) {
     Column(modifier) {
         ClubInfoView(
             Modifier
                 .requiredHeightIn(200.dp)
                 .weight(5f),
-            createdAt
+            createdAt,
+            sizeOfUsers,
+            uniqueNum,
+            teamName,
+            emblem
         )
 
     }
@@ -105,11 +128,29 @@ private fun ProfileView(
 @Composable
 @Preview
 fun ProfileScreenPreview() {
-    ProfileView(createdAt = mutableStateOf(""))
+    ProfileView(
+        createdAt = mutableStateOf(""),
+        sizeOfUsers = mutableStateOf(""),
+        uniqueNum = mutableStateOf(""),
+        teamName = mutableStateOf(""),
+        emblem = mutableStateOf("")
+    )
 }
 
 @Composable
 @Preview
 fun ClubPageScreenPreview() {
-    ClubPageScreen(rememberNavController())
+    ClubPageScreen(
+        rememberNavController(),
+        {},
+        mutableStateOf(""),
+        {},
+        mutableStateOf(""),
+        {},
+        mutableStateOf(""),
+        {},
+        mutableStateOf(""),
+        {},
+        mutableStateOf("")
+    )
 }
