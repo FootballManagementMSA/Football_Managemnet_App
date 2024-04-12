@@ -1,12 +1,12 @@
-package com.example.feature_joinclub.domain.usecase
+package com.example.feature_clubpage.presentation
 
 import com.example.core.datasource.UserLocalDataSource
 import javax.inject.Inject
 
-class GetSelectedTeamCreatedAtUseCase @Inject constructor(
+class GetSelectedTeamNameUseCase @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource
 ) {
     suspend operator fun invoke(): String {
-        return userLocalDataSource.getSelectedTeamCreatedAt()
+        return userLocalDataSource.getSelectedTeamName()
     }
 }
