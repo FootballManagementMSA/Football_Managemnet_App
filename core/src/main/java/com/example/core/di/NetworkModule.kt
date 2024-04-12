@@ -9,6 +9,7 @@ import com.example.network_api.api.ClubApi
 import com.example.network_api.api.FootballManagerApi
 import com.example.network_api.api.MainHomeApi
 import com.example.network_api.api.NaverApi
+import com.example.network_api.api.SquadApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -98,5 +99,11 @@ object NetworkModule {
     @Singleton
     fun provideClubApi(retrofit: Retrofit): ClubApi {
         return retrofit.create(ClubApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSquadApi(retrofit: Retrofit): SquadApi {
+        return retrofit.create(SquadApi::class.java)
     }
 }

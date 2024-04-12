@@ -43,6 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.model.ClubMember
 import com.example.core.model.Schedule
 import com.example.ui_component.R
@@ -61,7 +63,7 @@ import com.example.ui_component.values.veryBigFont
 import com.example.ui_component.values.veryTinyFont
 
 @Composable
-fun ScheduleView_Sample(modifier: Modifier = Modifier, currentSchedule: State<List<Schedule>>, currentClubMember:State<List<ClubMember>>) {
+fun ScheduleView_Sample(navHostController: NavHostController,modifier: Modifier = Modifier, currentSchedule: State<List<Schedule>>, currentClubMember:State<List<ClubMember>>) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     val tabs = listOf("일정","멤버","맴버신청")
@@ -120,7 +122,9 @@ fun ScheduleView_Sample(modifier: Modifier = Modifier, currentSchedule: State<Li
                         buttonName = "일정 생성하기",
                         showButton = true,
                         listIcon = Icons.Default.DateRange,
-                        onClick = { }) {
+                        onClick = {
+                            navHostController.navigate("make_schedule")
+                        }) {
                         items(currentSchedule.value) { schedule ->
                             DefaultItem(
                                 modifier = Modifier.padding(bottom = 12.dp),
@@ -321,7 +325,7 @@ fun ScheduleViewPreview() {
     val state1= remember {
         mutableStateOf(generateDummyData1(5))
     }
-    ScheduleView_Sample(currentSchedule = state, currentClubMember = state1)
+    ScheduleView_Sample(navHostController = rememberNavController(),currentSchedule = state, currentClubMember = state1)
 }
 
 

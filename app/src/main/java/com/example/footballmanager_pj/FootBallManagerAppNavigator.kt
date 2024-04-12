@@ -68,7 +68,7 @@ fun FootBallManagerAppNavigator(
         }
         composable(Route.CLUB_PAGE) {
             onNavigate(Route.CLUB_PAGE)
-            ClubPageScreen()
+            ClubPageScreen(navHostController)
         }
         composable(Route.STUDENT_VERIFICATION) {
             onNavigate(Route.STUDENT_VERIFICATION)
@@ -86,9 +86,9 @@ fun FootBallManagerAppNavigator(
             )
         }
         composable("make_schedule") {
-            MakeScheduleScreen { id, schedule ->
-                Log.e("123", "$id $schedule")
-                scheduleViewModel.makeClub(id, schedule)
+            MakeScheduleScreen { schedule ->
+                Log.e("123", "$schedule")
+                scheduleViewModel.makeClub(schedule)
             }
         }
         composable(Route.PROFILE_SETTING) {
