@@ -57,7 +57,8 @@ fun FootBallManagerAppNavigator(
     ) {
         composable(Route.HOME) {
             onNavigate(Route.HOME)
-            HomeScreen(navHostController)
+            ClubPageScreen()
+           // HomeScreen(navHostController)
         }
         composable(Route.LOGIN) {
             onNavigate(Route.LOGIN)

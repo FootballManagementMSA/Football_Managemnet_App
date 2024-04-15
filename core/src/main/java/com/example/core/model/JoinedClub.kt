@@ -5,6 +5,7 @@ data class JoinedClub(
     val message: String,
     val data: List<UserTeamInfoModel>,
 )
+
 data class UserTeamInfoModel(
     val role: String,
     val introduce: String,
@@ -14,3 +15,4 @@ data class UserTeamInfoModel(
     val createdAt: String,
     val sizeOfUsers: Int
 )
+

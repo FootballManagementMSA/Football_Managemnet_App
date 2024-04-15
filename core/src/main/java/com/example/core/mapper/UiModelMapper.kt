@@ -1,11 +1,13 @@
 package com.example.core.mapper
 
 import android.util.Log
+import com.example.core.mapper.UiModelMapper.mapToUiModel
 import com.example.core.model.Club
 import com.example.core.model.ClubInfo
 import com.example.core.model.JoinedClub
 import com.example.core.model.JoinedClubData
 import com.example.core.model.JoinedClubInfo
+import com.example.core.model.JoinedMember
 import com.example.core.model.LocalScreen
 import com.example.core.model.LocationInfo
 import com.example.core.model.MainHomeScheduleUiModel
@@ -19,6 +21,7 @@ import com.example.core.model.PositionPresetUIModel
 import com.example.core.model.SignOut
 import com.example.core.model.StudentUiModel
 import com.example.core.model.Team
+import com.example.core.model.UserModel
 import com.example.core.model.UserTeamInfoModel
 import com.example.network_api.entity.Member
 import com.example.network_api.entity.PositionPreset
@@ -27,6 +30,7 @@ import com.example.network_api.response.ClubInfoResponse
 import com.example.network_api.response.JoinedClubDataResponse
 import com.example.network_api.response.JoinedClubInfoResponse
 import com.example.network_api.response.JoinedClubResponse
+import com.example.network_api.response.JoinedMemberResponse
 import com.example.network_api.response.LocationInfoResponse
 import com.example.network_api.response.MainHomeScheduleResponse
 import com.example.network_api.response.MainHomeStudentDataResponse
@@ -37,6 +41,7 @@ import com.example.network_api.response.SearchClubResponse
 import com.example.network_api.response.SignOutResponse
 import com.example.network_api.response.Student
 import com.example.network_api.response.TeamResponse
+import com.example.network_api.response.User
 import com.example.network_api.response.UserInfoResponse
 import com.example.network_api.response.UserTeamInfo
 
@@ -163,7 +168,7 @@ object UiModelMapper {
                     total = data.total,
                     start = data.start,
                     display = data.display,
-                    items = data.items.map{it.mapToUiModel()}
+                    items = data.items.map { it.mapToUiModel() }
 
                 )
             }
@@ -278,6 +283,7 @@ object UiModelMapper {
         uniqueNum = this.uniqueNum
     )
 
+
     fun RespResult<JoinedClubResponse>.mapToUiModel(): JoinedClub {
         return when (this) {
             is RespResult.Success -> {
@@ -301,6 +307,32 @@ object UiModelMapper {
         }
     }
 
+    fun RespResult<JoinedMemberResponse>.mapToUiModel(): JoinedMember {
+        return when (this) {
+            is RespResult.Success -> {
+                Log.e("test", data.data.toString())
+                JoinedMember(
+                    status = data.status,
+                    message = data.message,
+                    code = data.code,
+                    data = data.data.map {
+                        it.mapToUiModel()
+                    }
+                )
+            }
+
+            is RespResult.Error -> {
+                JoinedMember(
+                    status = -1,
+                    message = this.error.code ?: "Unknown code",
+                    code = "error",
+                    data = emptyList()
+                )
+            }
+        }
+    }
+
+
     fun UserTeamInfo.mapToUiModel() = UserTeamInfoModel(
         role = this.role,
         introduce = this.introduce,
@@ -310,6 +342,15 @@ object UiModelMapper {
         createdAt = this.createdAt,
         sizeOfUsers = this.sizeOfUsers
     )
+
+    fun User.mapToUiModel() = UserModel(
+        userId = this.userId,
+        userName = this.userName,
+        position = this.position,
+        age = this.age,
+        teamCnt = this.teamCnt
+    )
+
 
     fun RespResult<SignOutResponse>.mapToUiModel(): SignOut {
         return when (this) {

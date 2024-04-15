@@ -1,5 +1,6 @@
 package com.example.core.datasource
 
+import android.util.Log
 import com.example.core.ResultState.MakeClubResult
 import com.example.core.ResultState.MakeClubScheduleResult
 import com.example.core.mapper.UiModelMapper.mapToUiModel
@@ -9,6 +10,7 @@ import com.example.core.model.ClubSchedule.Companion.mapToEntity
 import com.example.core.model.LocationInfo
 import com.example.core.model.MakeClubModel
 import com.example.core.model.Map
+import com.example.core.model.UserModel
 import com.example.core.model.UserTeamInfoModel
 import com.example.core.util.FormDataUtil
 import com.example.network_api.repository.ClubRepository
@@ -48,6 +50,8 @@ class ClubDataSourceImpl @Inject constructor(
     }
 
 
+
+
     override suspend fun createClubSchedule(
         teamId: Long,
         clubSchedule: ClubSchedule
@@ -69,7 +73,11 @@ class ClubDataSourceImpl @Inject constructor(
         return clubRepository.getJoinedClub(userId).mapToUiModel().data
     }
 
+    override suspend fun getJoinedMember(): List<UserModel> {
+        val teamId=userLocalDataSource.getSelectedTeamId()
+        Log.d("teamid입니다",teamId.toString())
 
-
+        return clubRepository.getJoinedMember(teamId).mapToUiModel().data
+    }
 
 }

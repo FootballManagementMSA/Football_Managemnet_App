@@ -4,6 +4,7 @@ import com.example.network_api.entity.ClubSchedule
 import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
 import com.example.network_api.response.DefaultApiResponse
+import com.example.network_api.response.JoinedMemberResponse
 import com.example.network_api.response.MapResponse
 import com.example.network_api.response.RespResult
 import com.example.network_api.response.SearchClubResponse
@@ -17,5 +18,7 @@ interface ClubRepository {
     suspend fun getJoinedClub(userId: Long): RespResult<JoinedClubResponse>
 
    suspend fun searchMap(code:String):RespResult<MapResponse>
+
+   suspend fun getJoinedMember(teamId:Long):RespResult<JoinedMemberResponse>
 
 }

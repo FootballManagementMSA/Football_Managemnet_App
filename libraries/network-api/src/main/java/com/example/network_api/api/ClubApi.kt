@@ -5,6 +5,7 @@ import com.example.network_api.entity.ClubSchedule
 import com.example.network_api.response.ClubJoinResponse
 import com.example.network_api.response.DefaultApiResponse
 import com.example.network_api.response.JoinedClubResponse
+import com.example.network_api.response.JoinedMemberResponse
 import com.example.network_api.response.MakeClubResponse
 import com.example.network_api.response.SearchClubResponse
 import okhttp3.MultipartBody
@@ -32,12 +33,6 @@ interface ClubApi {
         @Query("search") code: String
     ): Response<SearchClubResponse>
 
-    @POST("/api/team-service/team/{teamId}/apply")
-    suspend fun clubJoin(
-        @Path("teamId") teamId: Long,
-        @Body JoinReq: ClubJoin
-    ): Response<ClubJoinResponse>
-
 
     @POST("/api/team-service/{teamId}/schedules")
     suspend fun makeClubSchedule(
@@ -45,10 +40,25 @@ interface ClubApi {
         @Body clubSchedule: ClubSchedule
     ): Response<DefaultApiResponse>
 
+
+
+    @POST("/api/team-service/team/{teamId}/apply")
+    suspend fun clubJoin(
+        @Path("teamId") teamId: Long,
+        @Body JoinReq: ClubJoin
+    ): Response<ClubJoinResponse>
+
+
     @GET("/api/team-service/users/{userId}/teams")
     suspend fun getJoinedClub(
         @Path("userId") userId: Long
     ): Response<JoinedClubResponse>
+
+
+    @GET("/api/user-service/users/teams/{teamId}")
+    suspend fun getJoinedMember(
+        @Path("teamId") teamId:Long
+    ):Response<JoinedMemberResponse>
 
 
 }

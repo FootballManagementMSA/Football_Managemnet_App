@@ -1,5 +1,6 @@
 package com.example.network.repository
 
+import android.util.Log
 import com.example.network_api.ErrorType
 import com.example.network_api.RespMapper
 import com.example.network_api.api.ClubApi
@@ -9,6 +10,7 @@ import com.example.network_api.repository.ClubRepository
 import com.example.network_api.response.JoinedClubResponse
 import com.example.network_api.response.MakeClubResponse
 import com.example.network_api.response.DefaultApiResponse
+import com.example.network_api.response.JoinedMemberResponse
 import com.example.network_api.response.MapResponse
 import com.example.network_api.response.RespResult
 import com.example.network_api.response.SearchClubResponse
@@ -63,6 +65,20 @@ internal class ClubRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getJoinedMember(teamId: Long): RespResult<JoinedMemberResponse> {
+        val response = clubApi.getJoinedMember(teamId)
+        return if (response.isSuccessful) {
+            RespResult.Success(response.body()!!)
+        } else {
+            val errorBodyJson = response.errorBody()?.string() ?: ""
+            val errorBody = RespMapper.errorMapper(errorBodyJson)
+            RespResult.Error(ErrorType(errorBody.message!!, errorBody.code))
+        }
+    }
+
+
+
+
 
     override suspend fun searchClub(code: String): RespResult<SearchClubResponse> {
         val response = clubApi.searchClub(code)
@@ -86,4 +102,6 @@ internal class ClubRepositoryImpl @Inject constructor(
 
 
     }
+
+
 }
