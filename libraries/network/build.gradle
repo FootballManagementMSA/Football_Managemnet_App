@@ -5,7 +5,7 @@ plugins {
 apply from: "../../base-build.gradle"
 
 android {
-    namespace 'com.example.network'
+    namespace 'com.sejongunivclub.network'
 }
 
 dependencies {

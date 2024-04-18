@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.feature_squard'
+    namespace 'com.sejongunivclub.feature_squard'
 }
 
 apply from: "../../base-compose-build.gradle"

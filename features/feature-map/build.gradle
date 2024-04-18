@@ -5,7 +5,7 @@ plugins {
 apply from: "../../base-compose-build.gradle"
 
 android {
-    namespace 'com.example.feature_map'
+    namespace 'com.sejongunivclub.feature_map'
 }
 
 dependencies {

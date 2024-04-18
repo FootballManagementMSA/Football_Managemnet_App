@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.coroutine'
+    namespace 'com.sejongunivclub.coroutine'
 }
 
 apply from: "../../base-build.gradle"

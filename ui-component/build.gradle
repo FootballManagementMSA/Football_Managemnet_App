@@ -6,7 +6,7 @@ plugins {
 apply from: "../base-compose-build.gradle"
 
 android {
-    namespace 'com.example.ui_component'
+    namespace 'com.sejongunivclub.ui_component'
 }
 
 dependencies {

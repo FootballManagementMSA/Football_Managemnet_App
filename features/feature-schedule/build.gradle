@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.feature_schedule'
+    namespace 'com.sejongunivclub.feature_schedule'
 }
 apply from: "../../base-compose-build.gradle"
 

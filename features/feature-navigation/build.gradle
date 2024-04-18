@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.feature_navigation'
+    namespace 'com.sejongunivclub.feature_navigation'
 }
 
 apply from: "../../base-compose-build.gradle"

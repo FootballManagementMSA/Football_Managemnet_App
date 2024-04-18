@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.feature_joinclub'
+    namespace 'com.sejongunivclub.feature_joinclub'
 }
 
 apply from: "../../base-compose-build.gradle"

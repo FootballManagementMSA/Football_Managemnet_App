@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.footballmanager_pj'
+    namespace 'com.sejongunivclub.footballmanager_pj'
 }
 
 apply from: "../base-compose-build.gradle"

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.calendar'
+    namespace 'com.sejongunivclub.calendar'
 }
 
 apply from: "../../base-compose-build.gradle"

@@ -5,7 +5,7 @@ plugins {
 apply from: "../../base-compose-build.gradle"
 
 android {
-    namespace 'com.example.feature_home'
+    namespace 'com.sejongunivclub.feature_home'
 }
 
 dependencies {

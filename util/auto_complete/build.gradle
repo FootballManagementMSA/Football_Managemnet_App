@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.auto_complete'
+    namespace 'com.sejongunivclub.auto_complete'
 }
 
 apply from: "../../base-compose-build.gradle"

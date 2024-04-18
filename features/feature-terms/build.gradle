@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.feature_terms'
+    namespace 'com.sejongunivclub.feature_terms'
 }
 
 apply from: "../../base-compose-build.gradle"
